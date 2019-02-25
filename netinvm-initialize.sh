@@ -164,6 +164,7 @@ else
     echo $grn '[+] kali full downloaded and exists' $end
 fi
 
+
 kalifull=e4c6999edccf27f97d4d014cdc66950b8b4148948abe8bb3a2c30bbc0915e95a
 echo $mag'    KNOWN HASH:'$kalifull $end
 download=`sha256sum ./kali-linux-2019.1-vm-amd64.7z | awk '{print $1}'`
@@ -173,6 +174,19 @@ if [ $kalifull = $download ]; then
 else
     echo $red'    LOCAL HASH:'$download $end
     echo $red '[-] kali hash verification FAILED' $end
+fi
+
+if [ ! -f Kali-Linux-2019.1-vm-amd64/Kali-Linux-2019.1-vm-amd64.vmdk ]; then
+    7z x ./kali-linux-2019.1-vm-amd64.7z
+else
+    echo $grn '[+] Kali Full VM previously unzipped' $end
+fi
+
+if [ ! -f Kali-Linux-2019.1-vm-amd64/Kali-Linux-2019.1-vm-amd64.qcow2 ]; then
+    echo $grn '[+] Converting Kali full to qcow2 format' $end
+    qemu-img convert -f vmdk -O qcow2 Kali-Linux-2019.1-vm-amd64/Kali-Linux-2019.1-vm-amd64.vmdk Kali-Linux-2019.1-vm-amd64/Kali-Linux-2019.1-vm-amd64.qcow2 
+else
+    echo $grn '[+] Kali Full previously converted to qcow2 format' $end
 fi
 
 if [ ! -f Metasploitable2-Linux/Metasploitable.vmdk ]; then
