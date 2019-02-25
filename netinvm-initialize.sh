@@ -177,7 +177,7 @@ if [ "$host" = "base" ]; then
     metasploitable2=2ae8788e95273eee87bd379a250d86ec52f286fa7fe84773a3a8f6524085a1ff
 
     echo     $mag '    KNOWN HASH:'$metasploitable2 $end
-    download=`echo sha256sum ./metasploitable-linux-2.0.0.zip | awk '{print $1}'`
+    download=`sha256sum ./metasploitable-linux-2.0.0.zip | awk '{print $1}'`
     if [ "$metasploitable2" = "$download" ]; then
         echo $mag'     LOCAL HASH:'$download $end
         echo $grn '[+] metasploitable hash verification PASSED' $end
@@ -207,7 +207,7 @@ if [ "$host" = "base" ]; then
 
     kalilight=5e9fe4b6f099c3a0062dd21b68c61ea328fc145d60536d8f20f1ab27ad21b856
     echo $mag'     KNOWN HASH:'$kalilight $end
-    download=`echo sha256sum ./kali-linux-light-2019.1-amd64.iso| awk '{print $1}'`
+    download=`sha256sum ./kali-linux-light-2019.1-amd64.iso| awk '{print $1}'`
     if [ "$kalilight" = "$download" ]; then
         echo $mag'     LOCAL HASH:'$download $end
         echo $grn '[+] kali hash verification PASSED' $end
@@ -227,7 +227,7 @@ if [ "$host" = "base" ]; then
 
     kalifull=e4c6999edccf27f97d4d014cdc66950b8b4148948abe8bb3a2c30bbc0915e95a
     echo $mag'     KNOWN HASH:'$kalifull $end
-    download=`echo sha256sum ./kali-linux-2019.1-vm-amd64.7z | awk '{print $1}'`
+    download=`sha256sum ./kali-linux-2019.1-vm-amd64.7z | awk '{print $1}'`
     if [ $kalifull = $download ]; then
         echo $mag'     LOCAL HASH:'$download $end
         echo $grn '[+] kali hash verification PASSED' $end
