@@ -278,6 +278,12 @@ if [ "$host" = "base" ]; then
             echo $grn '[+] copying msfinstall on ' ${vm}  $end
             scp ./msfinstall ${vm}:./
         fi
+        if ssh ${vm} stat ./netinvm-initialize.sh \> /dev/null 2\>\&1; then
+            echo $grn '[+] netinvm-initialize.sh exists on ' ${vm}  $end
+        else
+            echo $grn '[+] copying netinvm-intialize.sh on ' ${vm}  $end
+            scp ./netinvm-initialize.sh ${vm}:./
+        fi
 
 
     done
