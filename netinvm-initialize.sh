@@ -92,7 +92,11 @@ EOF
         md5sum default_keys/ssh_host*) | sort
     fi
     cd
+    if ! sudo apt-get -qq install  asciio; then
+        apt-get install asciio
+    fi
 exit 0
+
 fi
 
 # echo $wht '[*] Check to see the last time apt-get update ran' $end
