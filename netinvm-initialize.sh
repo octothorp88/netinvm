@@ -93,22 +93,6 @@ EOF
         sudo git clone --recursive https://github.com/ethicalhack3r/DVWA.git /var/www/html/dvwa
     fi
 
-elif [ "$host" = "kali" ]; then
-cat << "EOF"
-  ____  __.      .__  .__
- |    |/ _|____  |  | |__|
- |      < \__  \ |  | |  |
- |    |  \ / __ \|  |_|  |
- |____|__ (____  /____/__|
-         \/    \/
-EOF
-pushd /etc/ssh
-mkdir default_keys
-mv ssh_host* default_keys
-dpkg-reconfigure openssh-server
-md5sum ssh_host*
-md5sum default_keys/ssh_host*
-
 fi
 
 # echo $wht '[*] Check to see the last time apt-get update ran' $end
@@ -180,7 +164,6 @@ EOF
     if ! sudo apt-get -qq install  asciio; then
         apt-get install asciio
     fi
-exit 0
 
 fi
 
@@ -244,28 +227,28 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
 
     # echo $wht '[*] Check if VIM is installed' $end
 
-# echo $wht '[*] Check to see the last time apt-get update ran' $end
-todaysdate=`date +%m%d`
-aptdate=`date -r /var/lib/apt/periodic/update-stamp +%m%d`
+    # echo $wht '[*] Check to see the last time apt-get update ran' $end
+    todaysdate=`date +%m%d`
+    aptdate=`date -r /var/lib/apt/periodic/update-stamp +%m%d`
 
-if [ $todaysdate -eq $aptdate ] ; then
-    echo $yel '[+] apt-get update already ran today' $end
-else
-    echo $gry '[ ] Running apt-get update to get things up to date' $end
-    sudo apt-get update -y
-fi
-# echo $wht '[*] Check to see if Metasploit is installed' $end
-if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
-    if ! which msfconsole > /dev/null; then
-        echo $gry '[ ] metasploit not installed yet' $end
-        echo [+] Downloading Metasploit
-        curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
-        chmod 755 msfinstall && \
-        echo [+] Installing Metasploit
-        ./msfinstall
+    if [ $todaysdate -eq $aptdate ] ; then
+        echo $yel '[+] apt-get update already ran today' $end
     else
-        echo $grn '[+] Metasploit is installed' $end
+        echo $gry '[ ] Running apt-get update to get things up to date' $end
+        sudo apt-get update -y
     fi
+    # echo $wht '[*] Check to see if Metasploit is installed' $end
+    if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
+        if ! which msfconsole > /dev/null; then
+            echo $gry '[ ] metasploit not installed yet' $end
+            echo [+] Downloading Metasploit
+            curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
+            chmod 755 msfinstall && \
+            echo [+] Installing Metasploit
+            ./msfinstall
+        else
+            echo $grn '[+] Metasploit is installed' $end
+        fi
 
     # echo $wht '[*] Check if Tmux is installed' $end
     if ! which tmux > /dev/null; then
