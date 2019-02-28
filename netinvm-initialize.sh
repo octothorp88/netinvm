@@ -166,17 +166,8 @@ EOF
     fi
 
 fi
+#---------- Done with the OS conditional shit
 
-# echo $wht '[*] Check to see the last time apt-get update ran' $end
-todaysdate=`date +%m%d`
-aptdate=`date -r /var/lib/apt/periodic/update-stamp +%m%d`
-
-if [ $todaysdate -eq $aptdate ] ; then
-    echo $yel '[+] apt-get update already ran today' $end
-else
-    echo $gry '[ ] Running apt-get update to get things up to date' $end
-    sudo apt-get update -y
-fi
 # echo $wht '[*] Check to see if Metasploit is installed' $end
 if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     if ! which msfconsole > /dev/null; then
@@ -225,18 +216,6 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
         echo $grn '[+] git already installed' $end
     fi
 
-    # echo $wht '[*] Check if VIM is installed' $end
-
-    # echo $wht '[*] Check to see the last time apt-get update ran' $end
-    todaysdate=`date +%m%d`
-    aptdate=`date -r /var/lib/apt/periodic/update-stamp +%m%d`
-
-    if [ $todaysdate -eq $aptdate ] ; then
-        echo $yel '[+] apt-get update already ran today' $end
-    else
-        echo $gry '[ ] Running apt-get update to get things up to date' $end
-        sudo apt-get update -y
-    fi
     # echo $wht '[*] Check to see if Metasploit is installed' $end
     if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
         if ! which msfconsole > /dev/null; then
@@ -444,5 +423,4 @@ if [ "$host" = "base" ]; then
         fi
     done
 fi
-
-
+fi
