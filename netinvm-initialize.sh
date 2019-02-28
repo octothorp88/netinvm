@@ -216,54 +216,6 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
         echo $grn '[+] git already installed' $end
     fi
 
-    # echo $wht '[*] Check to see if Metasploit is installed' $end
-    if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
-        if ! which msfconsole > /dev/null; then
-            echo $gry '[ ] metasploit not installed yet' $end
-            echo [+] Downloading Metasploit
-            curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
-            chmod 755 msfinstall && \
-            echo [+] Installing Metasploit
-            ./msfinstall
-        else
-            echo $grn '[+] Metasploit is installed' $end
-        fi
-
-    # echo $wht '[*] Check if Tmux is installed' $end
-    if ! which tmux > /dev/null; then
-        echo [ ] tmux not installed
-        echo [+] installing tmux
-        sudo apt-get install tmux -y
-    else
-        echo $grn '[+] Tmux is already installed' $end
-    fi
-
-    # echo $wht '[*] Check if postgresql is installed' $end
-    # if ! which postgresql > /dev/null; then
-    if ! sudo apt-get -qq install postgresql-common ; then
-        echo [ ] postgresql not installed
-        echo [+] installing postgresql
-        sudo apt-get install postgresql -y
-    else
-        echo $grn '[+] postgresql is already installed' $end
-    fi
-
-    if ! sudo apt-get -qq install htop ; then
-        echo [ ] htop not installed
-        echo [+] installing htop
-        sudo apt-get install htop -y
-    else
-        echo $grn '[+] htop is already installed' $end
-    fi
-
-    # echo $wht '[*] Check if GIT is installed' $end
-    if ! which git > /dev/null; then
-        echo '[+] installing git'
-        sudo apt-get install git -y
-    else
-        echo $grn '[+] git already installed' $end
-    fi
-
     # echo $wht '[*] Check if VIM is installed' $end
     if ! which vim > /dev/null; then
         echo [+] installing vim
@@ -422,5 +374,4 @@ if [ "$host" = "base" ]; then
             scp ./netinvm-initialize.sh ${vm}:./
         fi
     done
-fi
 fi
