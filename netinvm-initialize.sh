@@ -164,12 +164,25 @@ cat << "EOF"
  |____|__ (____  /____/__|
          \/    \/
 EOF
-pushd /etc/ssh
-mkdir default_keys
-mv ssh_host* default_keys
-dpkg-reconfigure openssh-server
-md5sum ssh_host*
-md5sum default_keys/ssh_host*
+    if [ ! -d /etc/ssh/default_keys ]; then
+        echo $grn '[+] Backing up origional SSH keys' $end
+        cd /etc/ssh
+        mkdir default_keys
+        mv ssh_host* default_keys
+        dpkg-reconfigure openssh-server
+        md5sum ssh_host*
+        md5sum default_keys/ssh_host*
+    else
+        echo $grn '[+] SSH Keys previously backed up' $end
+        cd /etc/ssh
+        (md5sum ssh_host*
+        md5sum default_keys/ssh_host*) | sort
+    fi
+    cd
+    if ! sudo apt-get -qq install  asciio; then
+        apt-get install asciio
+    fi
+exit 0
 
 fi
 
@@ -448,8 +461,6 @@ if [ "$host" = "base" ]; then
             echo $grn '[+] copying netinvm-intialize.sh on ' ${vm}  $end
             scp ./netinvm-initialize.sh ${vm}:./
         fi
-
-
     done
 fi
 
