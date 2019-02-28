@@ -80,20 +80,18 @@ cat << "EOF"
      Make sure you update the sudoers file for me
      user1   ALL=(ALL:ALL) ALL
 EOF
-if ! sudo apt-get -qq install git ; then
-    sudo apt-get install git -y
-fi
+    if ! sudo apt-get -qq install git ; then
+        sudo apt-get install git -y
+    fi
 
-if ! sudo apt-get -qq install mysql-client ; then
-    sudo apt-get install mysql-client mysql-server \
-        php php-gd php-mysqli libapache2-mod-php -y
-fi
+    if ! sudo apt-get -qq install mysql-client ; then
+        sudo apt-get install mysql-client mysql-server \
+            php php-gd php-mysqli libapache2-mod-php -y
+    fi
 
-if [ ! -d /var/www/html/dvwa ] ; then
-    git clone --recursive https://github.com/ethicalhack3r/DVWA.git /var/www/html/dvwa
-fi
-
-
+    if [ ! -d /var/www/html/dvwa ] ; then
+        sudo git clone --recursive https://github.com/ethicalhack3r/DVWA.git /var/www/html/dvwa
+    fi
 
 elif [ "$host" = "kali" ]; then
 cat << "EOF"
