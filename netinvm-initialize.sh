@@ -68,6 +68,93 @@ cat << "EOF"
      \/     \/      \/     \/
 EOF
 
+elif [ "$host" = "dmzb" ]; then
+cat << "EOF"
+    .___             ___.
+  __| _/_____ _______\_ |__
+ / __ |/     \\___   /| __ \
+/ /_/ |  Y Y  \/    / | \_\ \
+\____ |__|_|  /_____ \|___  /
+     \/     \/      \/    \/
+
+     Make sure you update the sudoers file for me
+     user1   ALL=(ALL:ALL) ALL
+EOF
+if ! sudo apt-get -qq install git ; then
+    sudo apt-get install git -y
+fi
+
+if ! sudo apt-get -qq install mysql-client ; then
+    sudo apt-get install mysql-client mysql-server \
+        php php-gd php-mysqli libapache2-mod-php -y
+fi
+
+if [ ! -d /var/www/html/dvwa ] ; then
+    git clone --recursive https://github.com/ethicalhack3r/DVWA.git /var/www/html/dvwa
+fi
+
+
+
+elif [ "$host" = "kali" ]; then
+cat << "EOF"
+  ____  __.      .__  .__
+ |    |/ _|____  |  | |__|
+ |      < \__  \ |  | |  |
+ |    |  \ / __ \|  |_|  |
+ |____|__ (____  /____/__|
+         \/    \/
+EOF
+pushd /etc/ssh
+mkdir default_keys
+mv ssh_host* default_keys
+dpkg-reconfigure openssh-server
+md5sum ssh_host*
+md5sum default_keys/ssh_host*
+
+fi
+
+# echo $wht '[*] Check to see the last time apt-get update ran' $end
+todaysdate=`date +%m%d`
+aptdate=`date -r /var/lib/apt/periodic/update-stamp +%m%d`
+
+if [ $todaysdate -eq $aptdate ] ; then
+    echo $yel '[+] apt-get update already ran today' $end
+else
+    echo $gry '[ ] Running apt-get update to get things up to date' $end
+    sudo apt-get update -y
+fi
+# echo $wht '[*] Check to see if Metasploit is installed' $end
+if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
+    if ! which msfconsole > /dev/null; then
+        echo $gry '[ ] metasploit not installed yet' $end
+        echo [+] Downloading Metasploit
+        curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
+        chmod 755 msfinstall && \
+        echo [+] Installing Metasploit
+        ./msfinstall
+    else
+        echo $grn '[+] Metasploit is installed' $end
+    fi
+
+    # echo $wht '[*] Check if Tmux is installed' $end
+    if ! which tmux > /dev/null; then
+        echo [ ] tmux not installed
+        echo [+] installing tmux
+        sudo apt-get install tmux -y
+    else
+        echo $grn '[+] Tmux is already installed' $end
+    fi
+
+    # echo $wht '[*] Check if postgresql is installed' $end
+    # if ! which postgresql > /dev/null; then
+    if ! sudo apt-get -qq install postgresql-common ; then
+        echo [ ] postgresql not installed
+        echo [+] installing postgresql
+        sudo apt-get install postgresql -y
+    else
+        echo $grn '[+] postgresql is already installed' $end
+    fi
+
 elif [ "$host" = "kali" ]; then
 cat << "EOF"
   ____  __.      .__  .__
