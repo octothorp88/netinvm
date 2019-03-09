@@ -161,6 +161,7 @@ EOF
         md5sum default_keys/ssh_host*) | sort
     fi
     cd
+    echo $yel '[+] going to execute asciio install' $end
     if ! sudo apt-get -qq install  asciio; then
         apt-get install asciio
     fi
