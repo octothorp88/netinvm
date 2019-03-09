@@ -136,7 +136,14 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     else
         echo $grn '[+] postgresql is already installed' $end
     fi
+    
+    if ! [ -d ~/.vim/bundle/vundle ]; then 
+        echo [ ] vundle not installed
+        echo [+] installing vundle so you dont get errors in vim
+        git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+    fi
 
+# IF this is Kali then lets get it configured correctly
 elif [ "$host" = "kali" ]; then
 cat << "EOF"
   ____  __.      .__  .__
@@ -161,9 +168,37 @@ EOF
         md5sum default_keys/ssh_host*) | sort
     fi
     cd
-    echo $yel '[+] going to execute asciio install' $end
+
+
+    # echo $wht '[*] Check if dotfiles have been pulled from git' $end
+    # echo $wht '[*] Check for dotfiles directory' $end
+    if [ ! -d ~/dotfiles ] ; then
+        echo $grn '[+] Pulling dotfiles from github' $grn
+        git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
+    else
+        echo $grn '[+] dotfiles directory already exists' $grn
+    fi
+
+    if [ ! -L .vimrc ]; then
+        echo $grn '[+] linking .vimrc' $grn
+        ln -s ./dotfiles/.vimrc .vimrc > /dev/null
+    else
+        echo $grn '[*] .vimrc previously linked' $grn
+    fi
+    if [ ! -L .tmux.conf ] ; then
+        echo $grn '[+] Linking .tmux.conf' $grn
+        ln -s ./dotfiles/tmux.conf .tmux.conf
+    else
+        echo $grn '[*] .tmux.conf previously linked' $grn
+    fi
+
     if ! sudo apt-get -qq install  asciio; then
+        echo $yel '[+] Installing asciio package' $end
         apt-get install asciio
+    fi
+
+    if ! [ -d ~/.vim/bundle/vundle ]; then 
+	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     fi
 
 fi
