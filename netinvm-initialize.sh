@@ -145,6 +145,7 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
 
 # IF this is Kali then lets get it configured correctly
 elif [ "$host" = "kali" ]; then
+echo $red
 cat << "EOF"
   ____  __.      .__  .__
  |    |/ _|____  |  | |__|
@@ -153,6 +154,7 @@ cat << "EOF"
  |____|__ (____  /____/__|
          \/    \/
 EOF
+echo $end
     if [ ! -d /etc/ssh/default_keys ]; then
         echo $grn '[+] Backing up origional SSH keys' $end
         cd /etc/ssh
@@ -162,10 +164,28 @@ EOF
         md5sum ssh_host*
         md5sum default_keys/ssh_host*
     else
-        echo $grn '[+] SSH Keys previously backed up' $end
-        cd /etc/ssh
-        (md5sum ssh_host*
-        md5sum default_keys/ssh_host*) | sort
+        echo $wht '[+] SSH Keys previously backed up' $end
+        echo $wht '-----------------------------------------------------' $end
+        # cd /etc/ssh
+        # (md5sum ssh_host*
+        # md5sum default_keys/ssh_host*) | sort
+        # echo $wht '-----------Default Keys Should Be Different----------' $end
+
+        for FILE in $(cd /etc/ssh/ && ls ssh_host*)
+        do
+            if [ -f /etc/ssh/default_keys/${FILE} ]; then
+                HASHDEFAULT=`md5sum /etc/ssh/default_keys/${FILE}`
+                HASHNEW=`md5sum /etc/ssh/${FILE}`
+                if [ ! "$HASHDEFAULT" = "$HASHNEW" ]; then
+                    echo $grn [+] $HASHNEW  $end
+                else
+                    echo $red [-] $HASHNEW  $end
+                    echo $red [-] $HASHDEFAULT  $end
+                fi
+
+            fi
+        done
+        echo $wht '-----------------------------------------------------' $end
     fi
     cd
 
@@ -197,11 +217,82 @@ EOF
         apt-get install asciio
     fi
 
-    if ! [ -d ~/.vim/bundle/vundle ]; then 
+    if ! [ -d ~/.vim/bundle/vundle ]; then
 	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     fi
 
+echo $grn
+cat << "EOF"
+________                    .___.__
+\______ \____________     __| _/|__| ______
+ |    |  \_  __ \__  \   / __ | |  |/  ___/
+ |    `   \  | \// __ \_/ /_/ | |  |\___ \
+/_______  /__|  (____  /\____ | |__/____  >
+        \/           \/      \/         \/
+EOF
+echo $end
+# Check if the dradis framework has been downloaded
+    echo $grn [*] Checking Dradis templates$end
+    if [ ! -f ~/Downloads/dradis-ce_compliance_package-oscp.v0.3.zip ]; then
+        cd Downloads
+        echo $grn '[*] Dowloading Dradis OCSP templates for Dradis' $end
+        wget https://dradisframework.com/academy/files/dradis-ce_compliance_package-oscp.v0.3.zip
+        cd
+    else
+        echo $grn '[*] Dradis OCSP templates exists in downloads' $end
+
+    fi
+    if [ ! -d ~/Downloads/dradis-ce_compliance_package-oscp.v0.3 ]; then
+        cd ~/Downloads
+        echo $grn '[*] Unzipping dradis-ce_copliance_package-oscp.v03.zip' $end
+        unzip dradis-ce_compliance_package-oscp.v0.3.zip
+        cd
+    fi
+
+    for TEMPLATE in evidence.txt note-tester.txt issue.txt note
+    do
+        if [ ! -f /var/lib/dradis/templates/notes/${TEMPLATE} ] ; then
+            echo $grn "[*] Adding Dradis OCSP ${TEMPLATE} templates to Dradis" $end
+            cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/$TEMPLATE /var/lib/dradis/templates/notes
+        else
+            echo $grn "[*]${end} OCSP ${TEMPLATE} templates exists in Dradis"
+        fi
+    done
+    if [ ! -f /var/lib/dradis/templates/reports/html_export/dradis_template-oscp.v0.3.html.erb ] ; then
+        echo $grn [*] Updating Dradis Reporting templates $end
+        cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/dradis_template-oscp.v0.3.html.erb /var/lib/dradis/templates/reports/html_export/
+    else
+        echo $grn [*] Dradis Reporting template exists $end
+    fi
+
 fi
+
+if [ ! -f ~/bin/dradis-reset.sh ]; then
+    echo $grn [*] Creating dradis-reset.sh script in ~/bin $end
+    mkdir -p ~/bin
+cat << "EOF" > ~/bin/dradis-reset.sh
+#!/bin/bash
+
+cd /usr/lib/dradis/
+echo $grn [*] $end Reset Dradis
+bundle exec thor dradis:reset
+echo $grn [*] $end Reset Dradis Attachments
+bundle exec thor dradis:reset:attachments
+echo $grn [*] $end Reset Dradis Database
+bundle exec thor dradis:reset:database
+echo $grn [*] $end Reset Dradis password
+bundle exec thor dradis:reset:password
+echo $grn [*] $end Reset Dradis again...
+bundle exec thor dradis:reset
+echo $grn [*] $end Launch Dradis
+dradis
+
+EOF
+else
+    echo $grn [*]    Dradis-reset.sh script EXISTS $end
+
+fi
+
 #---------- Done with the OS conditional shit
 
 # echo $wht '[*] Check to see if Metasploit is installed' $end
