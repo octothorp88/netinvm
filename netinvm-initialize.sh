@@ -165,7 +165,7 @@ echo $end
         md5sum default_keys/ssh_host*
     else
         echo $wht '[+] SSH Keys previously backed up' $end
-        echo $wht '-----------------------------------------------------' $end
+        echo $wht '-------------------------------------------------------------' $end
         # cd /etc/ssh
         # (md5sum ssh_host*
         # md5sum default_keys/ssh_host*) | sort
@@ -174,18 +174,17 @@ echo $end
         for FILE in $(cd /etc/ssh/ && ls ssh_host*)
         do
             if [ -f /etc/ssh/default_keys/${FILE} ]; then
-                HASHDEFAULT=`md5sum /etc/ssh/default_keys/${FILE}`
-                HASHNEW=`md5sum /etc/ssh/${FILE}`
+                HASHDEFAULT=`md5sum /etc/ssh/default_keys/${FILE} | awk '{print $1}'`
+                HASHNEW=`md5sum /etc/ssh/${FILE} | awk '{print $1}'`
                 if [ ! "$HASHDEFAULT" = "$HASHNEW" ]; then
-                    echo $grn [+] $HASHNEW  $end
+                    echo $grn [+] $HASHNEW $FILE  $end
                 else
-                    echo $red [-] $HASHNEW  $end
-                    echo $red [-] $HASHDEFAULT  $end
+                    echo $red [-] $HASHNEW  $FILE DEFAULT KEY$end
                 fi
 
             fi
         done
-        echo $wht '-----------------------------------------------------' $end
+        echo $wht '-------------------------------------------------------------' $end
     fi
     cd
 
