@@ -11,8 +11,8 @@ gry='\e[1;37m'
 lgrn='\e[1;92m'
 end='\e[0m'
 
+# ASCII art by http://patorjk.com/software/taag/#p=display&f=Graffiti&t=kali%0A
 cat << "EOF"
-
  _______          __  .___     ____   _________
  \      \   _____/  |_|   | ___\   \ /   /     \
  /   |   \_/ __ \   __\   |/    \   Y   /  \ /  \
@@ -136,8 +136,8 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     else
         echo $grn '[+] postgresql is already installed' $end
     fi
-    
-    if ! [ -d ~/.vim/bundle/vundle ]; then 
+
+    if ! [ -d ~/.vim/bundle/vundle ]; then
         echo [ ] vundle not installed
         echo [+] installing vundle so you dont get errors in vim
         git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
@@ -156,7 +156,7 @@ cat << "EOF"
 EOF
 echo $end
     if [ ! -d /etc/ssh/default_keys ]; then
-        echo $grn '[+] Backing up origional SSH keys' $end
+        echo $grn [+]$end Backing up origional SSH keys
         cd /etc/ssh
         mkdir default_keys
         mv ssh_host* default_keys
@@ -164,7 +164,7 @@ echo $end
         md5sum ssh_host*
         md5sum default_keys/ssh_host*
     else
-        echo $wht '[+] SSH Keys previously backed up' $end
+        echo $grn [+]$end SSH Keys previously backed up
         echo $wht '-------------------------------------------------------------' $end
         # cd /etc/ssh
         # (md5sum ssh_host*
@@ -177,11 +177,10 @@ echo $end
                 HASHDEFAULT=`md5sum /etc/ssh/default_keys/${FILE} | awk '{print $1}'`
                 HASHNEW=`md5sum /etc/ssh/${FILE} | awk '{print $1}'`
                 if [ ! "$HASHDEFAULT" = "$HASHNEW" ]; then
-                    echo $grn [+] $HASHNEW $FILE  $end
+                    echo $grn [+]$end $HASHNEW $FILE
                 else
                     echo $red [-] $HASHNEW  $FILE DEFAULT KEY$end
                 fi
-
             fi
         done
         echo $wht '-------------------------------------------------------------' $end
@@ -192,27 +191,27 @@ echo $end
     # echo $wht '[*] Check if dotfiles have been pulled from git' $end
     # echo $wht '[*] Check for dotfiles directory' $end
     if [ ! -d ~/dotfiles ] ; then
-        echo $grn '[+] Pulling dotfiles from github' $grn
+        echo $grn [+]$end Pulling dotfiles from github
         git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
     else
-        echo $grn '[+] dotfiles directory already exists' $grn
+        echo $grn [+]$end dotfiles directory already exists
     fi
 
     if [ ! -L .vimrc ]; then
-        echo $grn '[+] linking .vimrc' $grn
+        echo $grn [+]$end linking .vimrc
         ln -s ./dotfiles/.vimrc .vimrc > /dev/null
     else
-        echo $grn '[*] .vimrc previously linked' $grn
+        echo $grn [*]$end .vimrc previously linked
     fi
     if [ ! -L .tmux.conf ] ; then
-        echo $grn '[+] Linking .tmux.conf' $grn
+        echo $grn [+]$end Linking .tmux.conf
         ln -s ./dotfiles/tmux.conf .tmux.conf
     else
-        echo $grn '[*] .tmux.conf previously linked' $grn
+        echo $grn [*]$end .tmux.conf previously linked
     fi
 
     if ! sudo apt-get -qq install  asciio; then
-        echo $yel '[+] Installing asciio package' $end
+        echo $yel [+]$end Installing asciio package
         apt-get install asciio
     fi
 
@@ -220,30 +219,30 @@ echo $end
 	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     fi
 
-echo $grn
+echo $yel
 cat << "EOF"
-________                    .___.__
-\______ \____________     __| _/|__| ______
- |    |  \_  __ \__  \   / __ | |  |/  ___/
- |    `   \  | \// __ \_/ /_/ | |  |\___ \
-/_______  /__|  (____  /\____ | |__/____  >
-        \/           \/      \/         \/
+ ________                    .___.__
+ \______ \____________     __| _/|__| ______
+  |    |  \_  __ \__  \   / __ | |  |/  ___/
+  |    `   \  | \// __ \_/ /_/ | |  |\___ \
+ /_______  /__|  (____  /\____ | |__/____  >
+         \/           \/      \/         \/
 EOF
 echo $end
 # Check if the dradis framework has been downloaded
-    echo $grn [*] Checking Dradis templates$end
+    echo $grn [*]$end Checking Dradis templates
     if [ ! -f ~/Downloads/dradis-ce_compliance_package-oscp.v0.3.zip ]; then
         cd Downloads
-        echo $grn '[*] Dowloading Dradis OCSP templates for Dradis' $end
+        echo $grn [*]$end Dowloading Dradis OCSP templates for Dradis
         wget https://dradisframework.com/academy/files/dradis-ce_compliance_package-oscp.v0.3.zip
         cd
     else
-        echo $grn '[*] Dradis OCSP templates exists in downloads' $end
+        echo $grn [*]$end Dradis OCSP templates exists in downloads
 
     fi
     if [ ! -d ~/Downloads/dradis-ce_compliance_package-oscp.v0.3 ]; then
         cd ~/Downloads
-        echo $grn '[*] Unzipping dradis-ce_copliance_package-oscp.v03.zip' $end
+        echo $grn [*]$end Unzipping dradis-ce_copliance_package-oscp.v03.zip
         unzip dradis-ce_compliance_package-oscp.v0.3.zip
         cd
     fi
@@ -251,23 +250,23 @@ echo $end
     for TEMPLATE in evidence.txt note-tester.txt issue.txt note
     do
         if [ ! -f /var/lib/dradis/templates/notes/${TEMPLATE} ] ; then
-            echo $grn "[*] Adding Dradis OCSP ${TEMPLATE} templates to Dradis" $end
+            echo $grn [*]$end Adding Dradis OCSP ${TEMPLATE} templates to Dradis
             cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/$TEMPLATE /var/lib/dradis/templates/notes
         else
             echo $grn "[*]${end} OCSP ${TEMPLATE} templates exists in Dradis"
         fi
     done
     if [ ! -f /var/lib/dradis/templates/reports/html_export/dradis_template-oscp.v0.3.html.erb ] ; then
-        echo $grn [*] Updating Dradis Reporting templates $end
+        echo $grn [*]$end Updating Dradis Reporting templates
         cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/dradis_template-oscp.v0.3.html.erb /var/lib/dradis/templates/reports/html_export/
     else
-        echo $grn [*] Dradis Reporting template exists $end
+        echo $grn [*]$end Dradis Reporting template exists
     fi
 
 fi
 
 if [ ! -f ~/bin/dradis-reset.sh ]; then
-    echo $grn [*] Creating dradis-reset.sh script in ~/bin $end
+    echo $grn [*]$end Creating dradis-reset.sh script in ~/bin
     mkdir -p ~/bin
 cat << "EOF" > ~/bin/dradis-reset.sh
 #!/bin/bash
@@ -288,7 +287,7 @@ dradis
 
 EOF
 else
-    echo $grn [*]    Dradis-reset.sh script EXISTS $end
+    echo $grn [*]$end Dradis-reset.sh script EXISTS
 
 fi
 
@@ -353,10 +352,10 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     # echo $wht '[*] Check if dotfiles have been pulled from git' $end
     # echo $wht '[*] Check for dotfiles directory' $end
     if [ ! -d ~/dotfiles ] ; then
-        echo $grn '[+] Pulling dotfiles from github' $grn
+        echo $grn [+]$end Pulling dotfiles from github
         git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
     else
-        echo $grn '[+] dotfiles directory already exists' $grn
+        echo $grn [+]$end dotfiles directory already exists
     fi
     # echo $wht '[*] Check if dotfiles are linked' $end
     if [ ! -L .vimrc ]; then
