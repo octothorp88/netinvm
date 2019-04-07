@@ -219,6 +219,22 @@ echo $end
 	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     fi
 
+    echo $wht [*]$end Checking for basic .ssh/config file
+    if [ ! -f ~/.ssh/config ]; then
+        echo $grn [*]$end Creating basic .ssh/config file for netivim
+cat << "EOF" >> ~/.ssh/config
+Host base
+    HostName 172.16.80.146
+    User user1
+    IdentityFile ~/.ssh/id_rsa
+    VisualHostKey=yes
+Host dmza
+    Hostname dmza
+    User user1
+    ProxyJump base
+EOF
+    fi
+
 echo $yel
 cat << "EOF"
  ________                    .___.__
