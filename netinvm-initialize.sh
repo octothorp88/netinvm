@@ -210,16 +210,20 @@ echo $end
         echo $grn [*]$end .tmux.conf previously linked
     fi
 
-    if ! sudo apt-get -qq install  asciio; then
-        echo $yel [+]$end Installing asciio package
-        apt-get install asciio
-    fi
+    # if ! sudo apt-get -qq install  asciio; then
+        # echo $yel [+]$end Installing asciio package
+        # apt-get install asciio
+    # fi
 
     if ! [ -d ~/.vim/bundle/vundle ]; then
 	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     fi
 
-    echo $wht [*]$end Checking for basic .ssh/config file
+    if [ ! -d ~/.ssh ]; then
+        echo $wht [*]$end Checking for ~/.ssh directory
+        mkdir ~/.ssh
+        chmod 700 ~/.ssh
+    fi
     if [ ! -f ~/.ssh/config ]; then
         echo $grn [*]$end Creating basic .ssh/config file for netivim
 cat << "EOF" >> ~/.ssh/config
@@ -234,6 +238,23 @@ Host dmza
     ProxyJump base
 EOF
     fi
+
+
+
+    echo $wht [*]$end Checking for basic .ssh/config file
+    if [ ! -f ~/bin/mount-vmware-shares.sh ]; then
+    echo $grn [*]$end creating  basic .ssh/config file
+cat << "EOF" > ~/bin/mount-vmware-shares.sh
+vmware-hgfsclient | while read folder; do
+    echo "[+] Mounting ${folder} (/mnt/hgfs/${folder})"
+    mkdir -p "/mnt/hgfs/${folder}"
+    umount -f "/mnt/hgfs/${folder}" 2>/dev/null
+    vmhgfs-fuse -o allow_other -o auto_unmount ".host:/${folder}" "/mnt/hgfs/${folder}"
+done
+EOF
+chmod +x ~/bin/mount-vmware-shares.sh
+
+fi
 
 echo $yel
 cat << "EOF"
@@ -516,3 +537,5 @@ if [ "$host" = "base" ]; then
         fi
     done
 fi
+#!/bin/bash
+
