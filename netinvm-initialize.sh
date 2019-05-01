@@ -20,6 +20,7 @@ lgrn='\e[1;92m'
 end='\e[0m'
 
 # ASCII art by http://patorjk.com/software/taag/#p=display&f=Graffiti&t=kali%0A
+# can be added with figlet and the Graffiti font
 cat << "EOF"
  _______          __  .___     ____   _________
  \      \   _____/  |_|   | ___\   \ /   /     \
