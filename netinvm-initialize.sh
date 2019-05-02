@@ -206,8 +206,18 @@ echo $end
         echo $grn [+]$end dotfiles directory already exists
     fi
 
+    if [ ! -L .bashrc ]; then
+        echo $grn [+]$end linking .bashrc
+            if [ -f ~/.bashrc ]; then mv ~/.bashrc ~/.bashrc_orig ; fi
+        ln -s ./dotfiles/.bashrc ~/.bashrc
+    fi
+
+
     if [ ! -L .vimrc ]; then
         echo $grn [+]$end linking .vimrc
+        if [ -f ~/.vimrc ]; then
+            mv ~/.vimrc ~/.vimrc_orig
+        fi
         ln -s ./dotfiles/.vimrc .vimrc > /dev/null
     else
         echo $grn [*]$end .vimrc previously linked
@@ -293,6 +303,9 @@ EOF
     fi
 
     if [ ! -f ~/bin/mount-vmware-shares.sh ]; then
+	if [ ! -d ~/bin ]; then 
+		mkdir ~/bin
+	fi
     echo $grn [*]$end creating vmware share script
 cat << "EOF" > ~/bin/mount-vmware-shares.sh
 vmware-hgfsclient | while read folder; do
