@@ -199,6 +199,14 @@ echo $end
 
     # echo $wht '[*] Check if dotfiles have been pulled from git' $end
     # echo $wht '[*] Check for dotfiles directory' $end
+
+    if [ ! -d /opt/udp-proto-scanner ] ; then
+        echo $grn [+]$end Pulling udp-proto-scanner
+        git clone https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner
+    else
+        echo $grn [+]$end udp-proto-scanner directory already exists
+    fi
+
     if [ ! -d ~/dotfiles ] ; then
         echo $grn [+]$end Pulling dotfiles from github
         git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
@@ -237,6 +245,13 @@ echo $end
     if ! sudo apt-get -qq install mingw-w64; then
         echo $yel [+]$end Installing mingw-w64 complier for exploits
         apt-get install mingw-w64
+    fi
+
+    if ! sudo apt-get -qq install masscan; then
+        echo $yel [+]$end Installing masscan port scanner
+        apt-get install masscan
+    else
+        echo $grn [*]$end masscan previously installed
     fi
 
     if [ $ftp -eq 1 ] ; then
