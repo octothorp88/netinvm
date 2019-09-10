@@ -203,6 +203,11 @@ echo $end
     if [ ! -d /opt/udp-proto-scanner ] ; then
         echo $grn [+]$end Pulling udp-proto-scanner
         git clone https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner
+        ln -s /opt/udp-proto-scanner/udp-proto-scanner.pl /usr/local/bin/udp-proto-scanner
+        ln -s /opt/udp-proto-scanner/udp-proto-scanner.conf /usr/local/bin/udp-proto-scanner.conf
+
+
+        # cp udp-proto-scanner.pl udp-proto-scanner.conf /usr/local/bin/
     else
         echo $grn [+]$end udp-proto-scanner directory already exists
     fi
