@@ -196,9 +196,26 @@ echo $end
     fi
     cd
 
-
+echo $yel
+cat << "EOF"
+  __                .__           .__                 __         .__  .__
+_/  |_  ____   ____ |  |   ______ |__| ____   _______/  |______  |  | |  |
+\   __\/  _ \ /  _ \|  |  /  ___/ |  |/    \ /  ___/\   __\__  \ |  | |  |
+ |  | (  <_> |  <_> )  |__\___ \  |  |   |  \\___ \  |  |  / __ \|  |_|  |__
+ |__|  \____/ \____/|____/____  > |__|___|  /____  > |__| (____  /____/____/
+                              \/          \/     \/            \/
+EOF
+echo $end
     # echo $wht '[*] Check if dotfiles have been pulled from git' $end
     # echo $wht '[*] Check for dotfiles directory' $end
+
+    if [ ! -d /usr/share/seclists ] ; then
+        echo $grn [+]$end Pulling danielmiessler seclists
+        git clone https://github.com/danielmiessler/SecLists.git /usr/share/seclists
+    else
+        echo $grn [+]$end danielmiessler seclists directory already exists
+    fi
+
 
     if [ ! -d /opt/udp-proto-scanner ] ; then
         echo $grn [+]$end Pulling udp-proto-scanner
