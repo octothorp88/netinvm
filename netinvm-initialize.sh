@@ -295,7 +295,7 @@ useradd -g ftpgroup -d /dev/null -s ftpuser
 pure-pw useradd offsec -u ftpuser -d /ftphome
 pure-pw mkdb
 cd /etc/pure-ftpd/auth
-ls -s ../conf/PureDB 60pdb
+ln -s ../conf/PureDB 60pdb
 mkdir -p /ftphome
 chown -R ftpuser:ftpgroup /ftphomne
 /etc/init.d/pureftpd restart
