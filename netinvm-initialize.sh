@@ -213,7 +213,7 @@ echo $end
         echo $grn [+]$end Pulling danielmiessler seclists
         git clone https://github.com/danielmiessler/SecLists.git /usr/share/seclists
     else
-        echo $grn [+]$end danielmiessler seclists directory already exists
+        echo $yel [*]$end danielmiessler seclists directory already exists
     fi
 
 
@@ -226,14 +226,14 @@ echo $end
 
         # cp udp-proto-scanner.pl udp-proto-scanner.conf /usr/local/bin/
     else
-        echo $grn [+]$end udp-proto-scanner directory already exists
+        echo $yel [*]$end udp-proto-scanner directory already exists
     fi
 
     if [ ! -d ~/dotfiles ] ; then
         echo $grn [+]$end Pulling dotfiles from github
         git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
     else
-        echo $grn [+]$end dotfiles directory already exists
+        echo $yel [*]$end dotfiles directory already exists
     fi
 
     if [ ! -L .bashrc ]; then
@@ -250,13 +250,13 @@ echo $end
         fi
         ln -s ./dotfiles/.vimrc .vimrc > /dev/null
     else
-        echo $grn [*]$end .vimrc previously linked
+        echo $yel [*]$end .vimrc previously linked
     fi
     if [ ! -L .tmux.conf ] ; then
         echo $grn [+]$end Linking .tmux.conf
         ln -s ./dotfiles/tmux.conf .tmux.conf
     else
-        echo $grn [*]$end .tmux.conf previously linked
+        echo $yel [*]$end .tmux.conf previously linked
     fi
 
     # if ! sudo apt-get -qq install  asciio; then
@@ -267,13 +267,15 @@ echo $end
     if ! sudo apt-get -qq install mingw-w64; then
         echo $yel [+]$end Installing mingw-w64 complier for exploits
         apt-get install mingw-w64
+    else
+        echo $yel [*]$end mingw-w64 previously installed
     fi
 
     if ! sudo apt-get -qq install masscan; then
         echo $yel [+]$end Installing masscan port scanner
         apt-get install masscan
     else
-        echo $grn [*]$end masscan previously installed
+        echo $yel [*]$end masscan previously installed
     fi
 
     if [ $ftp -eq 1 ] ; then
@@ -374,7 +376,7 @@ echo $end
         wget https://dradisframework.com/academy/files/dradis-ce_compliance_package-oscp.v0.3.zip
         cd
     else
-        echo $grn [*]$end Dradis OCSP templates exists in downloads
+        echo $yel [*]$end Dradis OCSP templates exists in downloads
 
     fi
     if [ ! -d ~/Downloads/dradis-ce_compliance_package-oscp.v0.3 ]; then
@@ -390,14 +392,14 @@ echo $end
             echo $grn [*]$end Adding Dradis OCSP ${TEMPLATE} templates to Dradis
             cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/$TEMPLATE /var/lib/dradis/templates/notes
         else
-            echo $grn "[*]${end} OCSP ${TEMPLATE} templates exists in Dradis"
+            echo $yel "[*]${end} OCSP ${TEMPLATE} templates exists in Dradis"
         fi
     done
     if [ ! -f /var/lib/dradis/templates/reports/html_export/dradis_template-oscp.v0.3.html.erb ] ; then
         echo $grn [*]$end Updating Dradis Reporting templates
         cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/dradis_template-oscp.v0.3.html.erb /var/lib/dradis/templates/reports/html_export/
     else
-        echo $grn [*]$end Dradis Reporting template exists
+        echo $yel [*]$end Dradis Reporting template exists
     fi
 
 fi
@@ -424,7 +426,7 @@ dradis
 
 EOF
 else
-    echo $grn [*]$end Dradis-reset.sh script EXISTS
+    echo $yel [*]$end Dradis-reset.sh script EXISTS
 
 fi
 
