@@ -286,19 +286,25 @@ echo $end
             apt-get install pure-ftpd
         fi
 
+    fi
+
+
+    if [ ! -f ~/bin/setup-ftp.sh ] ; then
+
 echo $grn [+]$end creating pure-ftpd setup script
 cat << "EOF" > ~/bin/setup-ftp.sh
 #!/bin/bash
 
 groupadd ftpgroup
 useradd -g ftpgroup -d /dev/null -s ftpuser
+echo Addin offsec FTP User
 pure-pw useradd offsec -u ftpuser -d /ftphome
 pure-pw mkdb
 cd /etc/pure-ftpd/auth
 ln -s ../conf/PureDB 60pdb
 mkdir -p /ftphome
-chown -R ftpuser:ftpgroup /ftphomne
-/etc/init.d/pureftpd restart
+chown -R ftpuser:ftpgroup /ftphome
+/etc/init.d/pure-ftpd restart
 
 
 #############################################################################
@@ -314,6 +320,7 @@ chown -R ftpuser:ftpgroup /ftphomne
 
 EOF
 chmod 755 ~/bin/setup-ftp.sh
+
     fi
 
     if ! [ -d ~/.vim/bundle/vundle ]; then
