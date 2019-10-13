@@ -667,5 +667,3 @@ if [ "$host" = "base" ]; then
         fi
     done
 fi
-#!/bin/bash
-
