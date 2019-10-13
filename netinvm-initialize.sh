@@ -216,6 +216,13 @@ echo $end
         echo $yel [*]$end danielmiessler seclists directory already exists
     fi
 
+    if [ ! -d /usr/share/pentest ] ; then
+        echo $grn [+]$end Pulling jivoi pentest directory
+        git clone https://github.com/jivoi/pentest.git /usr/share/pentest
+    else
+        echo $yel [*]$end jivoi pentest directory already exists
+    fi
+
 
     if [ ! -d /opt/udp-proto-scanner ] ; then
         echo $grn [+]$end Pulling udp-proto-scanner
@@ -263,6 +270,20 @@ echo $end
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
+
+    if ! sudo apt-get -qq install sshfs; then
+        echo $yel [+]$end Installing sshfs \(ssh file system\)
+        apt-get install sshfs
+    else
+        echo $yel [*]$end sshfs previously installed
+    fi
+
+    if ! sudo apt-get -qq install bvi; then
+        echo $yel [+]$end Installing bvi \(Binary VI\) editor
+        apt-get install bvi
+    else
+        echo $yel [*]$end bvi previously installed
+    fi
 
     if ! sudo apt-get -qq install mingw-w64; then
         echo $yel [+]$end Installing mingw-w64 complier for exploits
