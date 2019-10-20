@@ -437,6 +437,15 @@ if [ ! -f ~/bin/dradis-reset.sh ]; then
     mkdir -p ~/bin
 cat << "EOF" > ~/bin/dradis-reset.sh
 #!/bin/bash
+#
+# The reset password is not working.. .so you need to run the following from
+# the /usr/lib/dradis directory
+# $ bin/rails console
+# Configuration.find_by_name('admin:password').update_attribute(:value, ::BCrypt::Password.create('password'))
+#
+#
+#
+#
 
 cd /usr/lib/dradis/
 echo $grn [*] $end Reset Dradis
