@@ -89,11 +89,11 @@ cat << "EOF"
      Make sure you update the sudoers file for me
      user1   ALL=(ALL:ALL) ALL
 EOF
-    if ! sudo apt-get -qq install git ; then
+    if ! dpkg-query -l git ; then
         sudo apt-get install git -y
     fi
 
-    if ! sudo apt-get -qq install mysql-client ; then
+    if ! dpkg-query mysql-client ; then
         sudo apt-get install mysql-client mysql-server \
             php php-gd php-mysqli libapache2-mod-php -y
     fi
@@ -138,7 +138,7 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
 
     # echo $wht '[*] Check if postgresql is installed' $end
     # if ! which postgresql > /dev/null; then
-    if ! sudo apt-get -qq install postgresql-common ; then
+    if ! dpkg-query -l postgresql-common ; then
         echo [ ] postgresql not installed
         echo [+] installing postgresql
         sudo apt-get install postgresql -y
@@ -270,6 +270,13 @@ echo $end
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
+
+    if ! sudo apt-get -qq install scrot; then
+        echo $yel [+]$end Installing scrot \(command line screenshot\)
+        apt-get install scrot
+    else
+        echo $yel [*]$end scrot previously installed
+    fi
 
     if ! sudo apt-get -qq install sshfs; then
         echo $yel [+]$end Installing sshfs \(ssh file system\)
