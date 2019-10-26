@@ -271,12 +271,19 @@ echo $end
         # apt-get install asciio
     # fi
 
-    if ! sudo apt-get -qq install scrot; then
-        echo $yel [+]$end Installing scrot \(command line screenshot\)
-        apt-get install scrot
+    if ! sudo apt-get -qq install mtpaint; then
+        echo $yel [+]$end Installing mtpaint \(Linux Paint Program\)
+        apt-get install mtpaint
     else
-        echo $yel [*]$end scrot previously installed
+        echo $yel [*]$end mtpaint previously installed
     fi
+
+    # if ! sudo apt-get -qq install scrot; then
+    #    echo $yel [+]$end Installing scrot \(command line screenshot\)
+    #    apt-get install scrot
+    # else
+    #    echo $yel [*]$end scrot previously installed
+    # fi
 
     if ! sudo apt-get -qq install sshfs; then
         echo $yel [+]$end Installing sshfs \(ssh file system\)
