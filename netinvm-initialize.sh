@@ -209,9 +209,9 @@ echo $end
     # echo $wht '[*] Check if dotfiles have been pulled from git' $end
     # echo $wht '[*] Check for dotfiles directory' $end
 
-    if [ ! -d /usr/share/supersploit ] ; then
+    if [ ! -d /opt/supersploit ] ; then
         echo $grn [+]$end Pulling thaddeusperson supersploit
-        git clone https://github.com/thaddeuspearson/Supersploit.git /usr/share/supersploit
+        git clone https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit
     else
         echo $yel [*]$end thaddeusperson SuperSploit directory already exists
     fi
@@ -223,16 +223,16 @@ echo $end
         echo $yel [*]$end danielmiessler seclists directory already exists
     fi
 
-    if [ ! -d /usr/share/PGen ] ; then
+    if [ ! -d /opt/PGen ] ; then
         echo $grn [+]$end Pulling rlaw125 PlayloadGenerator aka PGen
-        git clone https://github.com/rlaw125/payloadgenerator.git /usr/share/payloadgenerator
+        git clone https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator
     else
         echo $yel [*]$end playloadgenerator aka pgen directory already exists
     fi
 
-    if [ ! -d /usr/share/pentest ] ; then
+    if [ ! -d /opt/pentest ] ; then
         echo $grn [+]$end Pulling jivoi pentest directory
-        git clone https://github.com/jivoi/pentest.git /usr/share/pentest
+        git clone https://github.com/jivoi/pentest.git /opt/pentest
     else
         echo $yel [*]$end jivoi pentest directory already exists
     fi
