@@ -209,6 +209,29 @@ echo $end
     # echo $wht '[*] Check if dotfiles have been pulled from git' $end
     # echo $wht '[*] Check for dotfiles directory' $end
 
+# MSFvenom Payload Creator (MSFPC) 
+
+if [ ! -d /opt/msfpc ] ; then
+    echo $grn [+]$end Pulling MSFVenom Payload Creator
+    echo $grn    $end ... apt install -y msfpc
+    git clone https://github.com/g0tmi1k/msfpc /opt/msfpc
+    chmod +x /opt/msfpc/msfpc.sh
+else
+        echo $yel [*]$end MSFVenom Payload Creator already pulled
+
+fi
+
+
+if [ ! -L ~/bin/msfpc ] ; then
+    echo $grn [*]$end Linking msfpc in local bin -- MSFVenom Payload Creator already pulled
+    ln -s /opt/msfpc/msfpc.sh ~/bin/msfpc
+else
+    echo $yel [*]$end msfpc previously linked inlocal bin -- MSFVenom Payload Creator 
+
+fi
+
+
+
     if [ ! -d /opt/supersploit ] ; then
         echo $grn [+]$end Pulling thaddeusperson supersploit
         git clone https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit
@@ -223,7 +246,7 @@ echo $end
         echo $yel [*]$end danielmiessler seclists directory already exists
     fi
 
-    if [ ! -d /opt/PGen ] ; then
+    if [ ! -d /opt/payloadgenerator ] ; then
         echo $grn [+]$end Pulling rlaw125 PlayloadGenerator aka PGen
         git clone https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator
     else
