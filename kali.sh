@@ -19,6 +19,18 @@ gry='\e[1;37m'
 lgrn='\e[1;92m'
 end='\e[0m'
 
+if  ! dpkg-query -l figlet > /dev/null; then
+    echo $grn[+]$end Installing figlet
+    echo
+    sudo apt-get -y install figlet
+    echo $grn
+    figlet Figlet!
+    echo $end
+    echo
+fi
+
+# sudo locale-gen "en_US.UTF-8"
+
 install_apt_pkg() {
 
     if  ! dpkg-query -l ${1} > /dev/null; then
@@ -235,6 +247,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "SupersSloit"
     pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "Seclists"
+    create_symlink /usr/share/seclists /opt/seclists
     pull_git_repo https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git /opt/windows_exploit_suggester "Windows Exploit Suggester"
     pull_git_repo https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git /opt/winpeas "WinPEAS"
 
