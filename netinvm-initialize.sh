@@ -29,6 +29,24 @@ install_apt_pkg() {
         fi
 }
 
+pull_git_repo() {
+    if [ ! -d ${2} ] ; then
+        echo $grn [+]$end ${3}
+        sudo git clone ${1} ${2}
+    else
+        echo $yel [*]$end ${3} previously installed
+    fi
+}
+
+create_symlink() {
+    if [ ! -L ${2} ]; then
+        echo $grn [+]$end linking $(basename -- $2)
+            if [ -f ${2} ]; then mv ${2} ${2}_orig ; fi
+        ln -s ${1} ${2}
+    else
+        echo $yel [*]$end $(basename -- $2) previously linked
+    fi
+}
 # ASCII art by http://patorjk.com/software/taag/#p=display&f=Graffiti&t=kali%0A
 # can be added with figlet and the Graffiti font
 echo $grn
@@ -135,7 +153,7 @@ aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
 if [ $todaysdate -eq $aptdate ] ; then
     echo $yel '[+] apt-get update already ran today' $end
 else
-    echo $grn '[ ] Running apt-get update to get things up to date' $end
+    echo $grn '[*] Running apt-get update to get things up to date' $end
     sudo apt-get update -y
 fi
 # echo $wht '[*] Check to see if Metasploit is installed' $end
@@ -170,11 +188,12 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
         echo $grn '[+] postgresql is already installed' $end
     fi
 
-    if ! [ -d ~/.vim/bundle/vundle ]; then
-        echo [ ] vundle not installed
-        echo [+] installing vundle so you dont get errors in vim
-        git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-    fi
+#    if ! [ -d ~/.vim/bundle/vundle ]; then
+#        echo [ ] vundle not installed
+#        echo [+] installing vundle so you dont get errors in vim
+#        git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+#    fi
+pull_git_repo https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle "Vundle package manager for VIM"
 
 # IF this is Kali then lets get it configured correctly
 elif [ "$host" = "kali" ]; then
@@ -230,114 +249,44 @@ _/  |_  ____   ____ |  |   ______ |__| ____   _______/  |______  |  | |  |
                               \/          \/     \/            \/
 EOF
 echo $end
-    # echo $wht '[*] Check if dotfiles have been pulled from git' $end
-    # echo $wht '[*] Check for dotfiles directory' $end
-
-# MSFvenom Payload Creator (MSFPC) 
-
-if [ ! -d /opt/msfpc ] ; then
-    echo $grn [+]$end Pulling MSFVenom Payload Creator
-    echo $grn    $end ... apt install -y msfpc
-    sudo git clone https://github.com/g0tmi1k/msfpc /opt/msfpc
-    chmod +x /opt/msfpc/msfpc.sh
-else
-        echo $yel [*]$end MSFVenom Payload Creator already pulled
-
-fi
 
 if [ ! -d ~/bin ]; then 
 	mkdir ~/bin
 fi
 
-if [ ! -L ~/bin/msfpc ] ; then
-    echo $grn [*]$end Linking msfpc in local bin -- MSFVenom Payload Creator already pulled
-    ln -s /opt/msfpc/msfpc.sh ~/bin/msfpc
-else
-    echo $yel [*]$end msfpc previously linked inlocal bin -- MSFVenom Payload Creator 
+# MSFvenom Payload Creator (MSFPC) 
+pull_git_repo https://github.com/g0tmi1k/msfpc /opt/msfpc "MSVenom Payload Creator"
+sudo chmod +x /opt/msfpc/msfpc.sh
+create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
-fi
+    pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "thaddeusperson supersploit"
+    pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "danielmiessler seclists"
 
+    pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "rlaw125 PlayloadGenerator aka PGen"
+    pull_git_repo https://github.com/jivoi/pentest.git /opt/pentest "jivoi pentest"
+    pull_git_repo https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner "udp-proto-scanner"
 
-    if [ ! -d /opt/supersploit ] ; then
-        echo $grn [+]$end Pulling thaddeusperson supersploit
-        sudo git clone https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit
-    else
-        echo $yel [*]$end thaddeusperson SuperSploit directory already exists
-    fi
-
-    if [ ! -d /usr/share/seclists ] ; then
-        echo $grn [+]$end Pulling danielmiessler seclists
-        sudo git clone https://github.com/danielmiessler/SecLists.git /usr/share/seclists
-    else
-        echo $yel [*]$end danielmiessler seclists directory already exists
-    fi
-
-    if [ ! -d /opt/payloadgenerator ] ; then
-        echo $grn [+]$end Pulling rlaw125 PlayloadGenerator aka PGen
-        sudo git clone https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator
-    else
-        echo $yel [*]$end playloadgenerator aka pgen directory already exists
-    fi
-
-    if [ ! -d /opt/pentest ] ; then
-        echo $grn [+]$end Pulling jivoi pentest directory
-        sudo git clone https://github.com/jivoi/pentest.git /opt/pentest
-    else
-        echo $yel [*]$end jivoi pentest directory already exists
-    fi
-
-
-    if [ ! -d /opt/udp-proto-scanner ] ; then
-        echo $grn [+]$end Pulling udp-proto-scanner
-        sudo git clone https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner
-        sudo ln -s /opt/udp-proto-scanner/udp-proto-scanner.pl /usr/local/bin/udp-proto-scanner
-        sudo ln -s /opt/udp-proto-scanner/udp-proto-scanner.conf /usr/local/bin/udp-proto-scanner.conf
-
-
-        # cp udp-proto-scanner.pl udp-proto-scanner.conf /usr/local/bin/
-    else
-        echo $yel [*]$end udp-proto-scanner directory already exists
-    fi
-
-    if [ ! -d ~/dotfiles ] ; then
-        echo $grn [+]$end Pulling dotfiles from github
-        git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
-    else
-        echo $yel [*]$end dotfiles directory already exists
-    fi
+    pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "Octothorp88 dotfiles"
+    echo $grn [+]$end Changing Permissions on ~/dotfiles directory
+    sudo chown -R $(whoami): ~/dotfiles
 
     if [ ! -L .bashrc ]; then
         echo $grn [+]$end linking .bashrc
             if [ -f ~/.bashrc ]; then mv ~/.bashrc ~/.bashrc_orig ; fi
         ln -s ./dotfiles/.bashrc ~/.bashrc
+    else
+        echo $yel [*]$end .bashrc previously linked
     fi
 
 
-    if [ ! -L .vimrc ]; then
-        echo $grn [+]$end linking .vimrc
-        if [ -f ~/.vimrc ]; then
-            mv ~/.vimrc ~/.vimrc_orig
-        fi
-        ln -s ./dotfiles/.vimrc .vimrc > /dev/null
-    else
-        echo $yel [*]$end .vimrc previously linked
-    fi
-    if [ ! -L .tmux.conf ] ; then
-        echo $grn [+]$end Linking .tmux.conf
-        ln -s ./dotfiles/tmux.conf .tmux.conf
-    else
-        echo $yel [*]$end .tmux.conf previously linked
-    fi
+    create_symlink ~/dotfiles/.vimrc ~/.vimrc
+    create_symlink ~/dotfiles/tmux.conf ~/.tmux.conf
 
     # if ! sudo apt-get -qq install  asciio; then
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
 
-    if ! sudo apt-get -qq install powershell; then
-        echo $yel [+]$end Installing powershell
-        apt-get install powershell
-    fi
 echo $grn
 cat << "EOF"
 
@@ -350,9 +299,7 @@ ____   _____________ _________  ________  ________  ___________
 EOF
 echo $end
 
-install_apt_pkg code "MicroSoft Visual Studio Code"
-
-
+    install_apt_pkg code "MicroSoft Visual Studio Code"
     install_apt_pkg imagemagick "Image utilities"
     install_apt_pkg mtpaint "Image utilities"
     # install_apt_pkg scrot "\(Command Line Screen Shot\)"
@@ -362,6 +309,7 @@ install_apt_pkg code "MicroSoft Visual Studio Code"
     install_apt_pkg masscan "port scanner"
     install_apt_pkg pure-ftpd "for exfil of data"
     install_apt_pkg code "Microsoft Visual Studio Code"
+    install_apt_pkg powershell "powershell"
 
 
     if [ ! -f ~/bin/setup-ftp.sh ] ; then
@@ -398,9 +346,10 @@ chmod 755 ~/bin/setup-ftp.sh
 
     fi
 
-    if ! [ -d ~/.vim/bundle/vundle ]; then
-	git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-    fi
+    pull_git_repo https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle "Vundle package manager for VIM"
+    # if ! [ -d ~/.vim/bundle/vundle ]; then
+	# git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+    # fi
 
     if [ ! -d ~/.ssh ]; then
         echo $wht [*]$end Checking for ~/.ssh directory
@@ -579,35 +528,12 @@ if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
         echo $grn '[+] vim already installed' $grn
     fi
 
-    # echo $wht '[*] Check if dotfiles have been pulled from git' $end
-    # echo $wht '[*] Check for dotfiles directory' $end
-    if [ ! -d ~/dotfiles ] ; then
-        echo $grn [+]$end Pulling dotfiles from github
-        git clone https://www.github.com/octothorp88/dotfiles ~/dotfiles
-    else
-        echo $grn [+]$end dotfiles directory already exists
-    fi
-    # echo $wht '[*] Check if dotfiles are linked' $end
-    if [ ! -L .vimrc ]; then
-        echo $grn '[+] linking .vimrc' $grn
-        ln -s ./dotfiles/.vimrc .vimrc > /dev/null
-    else
-        echo $grn '[*] .vimrc previously linked' $grn
-    fi
-    if [ ! -L .tmux.conf ] ; then
-        echo $grn '[+] Linking .tmux.conf' $grn
-        ln -s ./dotfiles/tmux.conf .tmux.conf
-    else
-        echo $grn '[*] .tmux.conf previously linked' $grn
-    fi
+    pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "Octothorp88 dotfiles"
 
-    # echo $wht '[*] Check if Vundel Is installed' $end
-    if [ ! -d ~/.vim/bundle/vundle ] ; then
-        echo $wht '[ ] installig vim plugin manager' $end
-        git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-    else
-        echo $grn '[*] vim vundle installed - make sure your run BundleInstall in vim' $grn
-    fi
+    create_symlink ~/dotfiles/.vimrc ~/.vimrc 
+    create_symlink ~/dotfiles/tmux.conf ~/.tmux.conf
+
+    pull_git_repo https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 fi
 
 if [ "$host" = "base" ]; then
