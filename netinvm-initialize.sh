@@ -167,9 +167,9 @@ echo $end
     if [ ! -d /etc/ssh/default_keys ]; then
         echo $grn [+]$end Backing up origional SSH keys
         cd /etc/ssh
-        mkdir default_keys
-        mv ssh_host* default_keys
-        dpkg-reconfigure openssh-server
+        sudo mkdir default_keys
+        sudo mv ssh_host* default_keys
+        sudo dpkg-reconfigure openssh-server
         md5sum ssh_host*
         md5sum default_keys/ssh_host*
     else
@@ -214,7 +214,7 @@ echo $end
 if [ ! -d /opt/msfpc ] ; then
     echo $grn [+]$end Pulling MSFVenom Payload Creator
     echo $grn    $end ... apt install -y msfpc
-    git clone https://github.com/g0tmi1k/msfpc /opt/msfpc
+    sudo git clone https://github.com/g0tmi1k/msfpc /opt/msfpc
     chmod +x /opt/msfpc/msfpc.sh
 else
         echo $yel [*]$end MSFVenom Payload Creator already pulled
@@ -234,28 +234,28 @@ fi
 
     if [ ! -d /opt/supersploit ] ; then
         echo $grn [+]$end Pulling thaddeusperson supersploit
-        git clone https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit
+        sudo git clone https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit
     else
         echo $yel [*]$end thaddeusperson SuperSploit directory already exists
     fi
 
     if [ ! -d /usr/share/seclists ] ; then
         echo $grn [+]$end Pulling danielmiessler seclists
-        git clone https://github.com/danielmiessler/SecLists.git /usr/share/seclists
+        sudo git clone https://github.com/danielmiessler/SecLists.git /usr/share/seclists
     else
         echo $yel [*]$end danielmiessler seclists directory already exists
     fi
 
     if [ ! -d /opt/payloadgenerator ] ; then
         echo $grn [+]$end Pulling rlaw125 PlayloadGenerator aka PGen
-        git clone https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator
+        sudo git clone https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator
     else
         echo $yel [*]$end playloadgenerator aka pgen directory already exists
     fi
 
     if [ ! -d /opt/pentest ] ; then
         echo $grn [+]$end Pulling jivoi pentest directory
-        git clone https://github.com/jivoi/pentest.git /opt/pentest
+        sudo git clone https://github.com/jivoi/pentest.git /opt/pentest
     else
         echo $yel [*]$end jivoi pentest directory already exists
     fi
@@ -263,9 +263,9 @@ fi
 
     if [ ! -d /opt/udp-proto-scanner ] ; then
         echo $grn [+]$end Pulling udp-proto-scanner
-        git clone https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner
-        ln -s /opt/udp-proto-scanner/udp-proto-scanner.pl /usr/local/bin/udp-proto-scanner
-        ln -s /opt/udp-proto-scanner/udp-proto-scanner.conf /usr/local/bin/udp-proto-scanner.conf
+        sudo git clone https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner
+        sudo ln -s /opt/udp-proto-scanner/udp-proto-scanner.pl /usr/local/bin/udp-proto-scanner
+        sudo ln -s /opt/udp-proto-scanner/udp-proto-scanner.conf /usr/local/bin/udp-proto-scanner.conf
 
 
         # cp udp-proto-scanner.pl udp-proto-scanner.conf /usr/local/bin/
@@ -310,7 +310,7 @@ fi
 
     if ! sudo apt-get -qq install mtpaint; then
         echo $yel [+]$end Installing mtpaint \(Linux Paint Program\)
-        apt-get install mtpaint
+        sudo apt-get install mtpaint
     else
         echo $yel [*]$end mtpaint previously installed
     fi
@@ -324,28 +324,28 @@ fi
 
     if ! sudo apt-get -qq install sshfs; then
         echo $yel [+]$end Installing sshfs \(ssh file system\)
-        apt-get install sshfs
+        sudo apt-get install sshfs
     else
         echo $yel [*]$end sshfs previously installed
     fi
 
     if ! sudo apt-get -qq install bvi; then
         echo $yel [+]$end Installing bvi \(Binary VI\) editor
-        apt-get install bvi
+        sudo apt-get install bvi
     else
         echo $yel [*]$end bvi previously installed
     fi
 
     if ! sudo apt-get -qq install mingw-w64; then
         echo $yel [+]$end Installing mingw-w64 complier for exploits
-        apt-get install mingw-w64
+        sudo apt-get install mingw-w64
     else
         echo $yel [*]$end mingw-w64 previously installed
     fi
 
     if ! sudo apt-get -qq install masscan; then
         echo $yel [+]$end Installing masscan port scanner
-        apt-get install masscan
+        sudo apt-get install masscan
     else
         echo $yel [*]$end masscan previously installed
     fi
@@ -355,7 +355,7 @@ fi
 
         if ! sudo apt-get -qq install pure-ftpd; then
             echo $yel [+]$end Installing pure-ftpd for exfil
-            apt-get install pure-ftpd
+            sudo apt-get install pure-ftpd
         fi
 
     fi
