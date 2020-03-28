@@ -169,7 +169,7 @@ echo $end
         cd /etc/ssh
         sudo mkdir default_keys
         sudo mv ssh_host* default_keys
-        sudo dpkg -reconfigure openssh-server
+        sudo dpkg-reconfigure openssh-server
         sudo md5sum ssh_host*
         sudo md5sum default_keys/ssh_host*
     else
@@ -221,6 +221,9 @@ else
 
 fi
 
+if [ ! -d ~/bin ]; then 
+	mkdir ~/bin
+fi
 
 if [ ! -L ~/bin/msfpc ] ; then
     echo $grn [*]$end Linking msfpc in local bin -- MSFVenom Payload Creator already pulled
@@ -229,7 +232,6 @@ else
     echo $yel [*]$end msfpc previously linked inlocal bin -- MSFVenom Payload Creator 
 
 fi
-
 
 
     if [ ! -d /opt/supersploit ] ; then
@@ -307,7 +309,17 @@ fi
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
+echo $grn
+cat << "EOF"
 
+____   _____________ _________  ________  ________  ___________
+\   \ /   /   _____/ \_   ___ \ \_____  \ \______ \ \_   _____/
+ \   Y   /\_____  \  /    \  \/  /   |   \ |    |  \ |    __)_ 
+  \     / /        \ \     \____/    |    \|    `   \|        \
+   \___/ /_______  /  \______  /\_______  /_______  /_______  /
+                 \/          \/         \/        \/        \/ 
+EOF
+echo $end
 
     if ! dpkg-query -l code >/dev/null; then
         echo $yel [+]$end Installing Visual Studio Code
