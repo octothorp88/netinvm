@@ -21,6 +21,7 @@ end='\e[0m'
 
 # ASCII art by http://patorjk.com/software/taag/#p=display&f=Graffiti&t=kali%0A
 # can be added with figlet and the Graffiti font
+echo $grn
 cat << "EOF"
  _______          __  .___     ____   _________
  \      \   _____/  |_|   | ___\   \ /   /     \
@@ -35,6 +36,7 @@ cat << "EOF"
 /_______  //_______  /  |____|  |______/  |____|
         \/         \/
 EOF
+echo $end
 
 host=`hostname`
 if [ "$host" = "base" ]; then
