@@ -24,9 +24,9 @@ install_apt_pkg() {
     if  ! dpkg-query -l ${1} > /dev/null; then
             echo $grn[+]$end Installing ${1} ${2}
             echo
-            echo $grn --------------------------------------------------------- $end
             sudo apt-get -y install ${1}
             echo
+            echo $grn[+]$end COMPLETE apt install ${3}
             echo $grn --------------------------------------------------------- $end
         else
             echo $yel[*]$end ${1} previously installed
@@ -35,12 +35,13 @@ install_apt_pkg() {
 
 pull_git_repo() {
     if [ ! -d ${2} ] ; then
-            echo
-            echo $grn --------------------------------------------------------- $end
             echo $grn[+]$end ${3}
+            echo 
             sudo git clone ${1} ${2}
-            echo
+	    echo 
+            echo $grn[+]$end COMPLETE ${3} GIT PULL
             echo $grn --------------------------------------------------------- $end
+            echo
         else
             echo $yel[*]$end ${3} previously installed
         fi
@@ -75,6 +76,15 @@ cat << "EOF"
         \/         \/
 EOF
 echo $end
+todaysdate=`date +%m%d`
+aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
+
+if [ $todaysdate -eq $aptdate ] ; then
+    echo $yel'[+] apt-get update already ran today' $end
+else
+    echo $grn'[*] Running apt-get update to get things up to date' $end
+    sudo apt-get update -y
+fi
 
 install_apt_pkg figlet "ASCII banner thingie"
 
@@ -120,16 +130,6 @@ else
     echo $yel[*]$end Microsoft APT repo previously configured
 fi
 
-# echo $wht '[*] Check to see the last time apt-get update ran' $end
-todaysdate=`date +%m%d`
-aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
-
-if [ $todaysdate -eq $aptdate ] ; then
-    echo $yel'[+] apt-get update already ran today' $end
-else
-    echo $grn'[*] Running apt-get update to get things up to date' $end
-    # sudo apt-get update -y
-fi
 # echo $wht '[*] Check to see if Metasploit is installed' $end
 if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     if ! which msfconsole > /dev/null; then
@@ -301,13 +301,13 @@ chmod 755 ~/bin/setup-ftp.sh
     # fi
 
     if [ ! -d ~/.ssh ]; then
-        echo $wht [*]$end Checking for ~/.ssh directory
+        echo $grn[*]$end Checking for ~/.ssh directory
         mkdir ~/.ssh
         chmod 700 ~/.ssh
     fi
 
     if [ ! -f ~/.ssh/config ]; then
-        echo $grn [*]$end Creating basic .ssh/config file for netivim
+        echo $grn[*]$end Creating basic .ssh/config file for netivim
 cat << "EOF" >> ~/.ssh/config
 Host base
     HostName 172.16.80.146
