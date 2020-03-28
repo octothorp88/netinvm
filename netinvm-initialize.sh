@@ -270,15 +270,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     echo $grn [+]$end Changing Permissions on ~/dotfiles directory
     sudo chown -R $(whoami): ~/dotfiles
 
-    if [ ! -L .bashrc ]; then
-        echo $grn [+]$end linking .bashrc
-            if [ -f ~/.bashrc ]; then mv ~/.bashrc ~/.bashrc_orig ; fi
-        ln -s ./dotfiles/.bashrc ~/.bashrc
-    else
-        echo $yel [*]$end .bashrc previously linked
-    fi
-
-
+    create_symlink ~/dotfiles/.bashrc ~/.bashrc
     create_symlink ~/dotfiles/.vimrc ~/.vimrc
     create_symlink ~/dotfiles/tmux.conf ~/.tmux.conf
 
@@ -373,9 +365,6 @@ EOF
     fi
 
     if [ ! -f ~/bin/mount-vmware-shares.sh ]; then
-	if [ ! -d ~/bin ]; then 
-		mkdir ~/bin
-	fi
     echo $grn [*]$end creating vmware share script
 cat << "EOF" > ~/bin/mount-vmware-shares.sh
 vmware-hgfsclient | while read folder; do
