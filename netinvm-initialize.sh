@@ -309,6 +309,11 @@ fi
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
+
+    if ! sudo apt-get -qq install powershell; then
+        echo $yel [+]$end Installing powershell
+        apt-get install powershell
+    fi
 echo $grn
 cat << "EOF"
 
