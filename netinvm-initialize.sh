@@ -2,7 +2,7 @@
 ftp=0
 
 while [ "$1" != "" ]; do
-    case $1 in 
+    case $1 in
         --ftp )     shift
                     ftp=1
                     ;;
@@ -307,6 +307,20 @@ fi
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
+
+
+    if ! dpkg-query code; then
+        echo $yel [+]$end Installing Visual Studio Code
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+        sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
+        sudo bash -c 'cat << EOF > /etc/apt/sources.list.d/vscode.list
+deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+EOF'
+        sudo apt update && sudo apt install code
+        sudo apt-get install code
+    else
+        echo $yel [*]$end Visual Studio Code previously installed
+    fi
 
     if ! sudo apt-get -qq install mtpaint; then
         echo $yel [+]$end Installing mtpaint \(Linux Paint Program\)
