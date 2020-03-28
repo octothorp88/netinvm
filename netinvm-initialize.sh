@@ -19,6 +19,16 @@ gry='\e[1;37m'
 lgrn='\e[1;92m'
 end='\e[0m'
 
+install_apt_pkg() {
+
+    if  ! dpkg-query -l ${1} > /dev/null; then
+            echo $grn [+]$end Installing ${1} ${2}
+            sudo apt-get -y install ${1}
+        else
+            echo $yel [*]$end ${1} previously installed
+        fi
+}
+
 # ASCII art by http://patorjk.com/software/taag/#p=display&f=Graffiti&t=kali%0A
 # can be added with figlet and the Graffiti font
 echo $grn
@@ -106,6 +116,18 @@ EOF
 
 fi
 
+
+if [ ! -f /etc/apt/trusted.gpg.d/microsoft.gpg ] ; then
+    echo $yel [+]$end Adding Microsoft GPG key and Apt Sources
+    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+    sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
+    sudo bash -c 'cat << EOF > /etc/apt/sources.list.d/vscode.list
+deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+EOF'
+else
+    echo $yel [*]$end Microsoft APT repo previously configured
+fi
+
 # echo $wht '[*] Check to see the last time apt-get update ran' $end
 todaysdate=`date +%m%d`
 aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
@@ -113,13 +135,13 @@ aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
 if [ $todaysdate -eq $aptdate ] ; then
     echo $yel '[+] apt-get update already ran today' $end
 else
-    echo $gry '[ ] Running apt-get update to get things up to date' $end
+    echo $grn '[ ] Running apt-get update to get things up to date' $end
     sudo apt-get update -y
 fi
 # echo $wht '[*] Check to see if Metasploit is installed' $end
 if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     if ! which msfconsole > /dev/null; then
-        echo $gry '[ ] metasploit not installed yet' $end
+        echo $yel '[ ] metasploit not installed yet' $end
         echo [+] Downloading Metasploit
         curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
         chmod 755 msfinstall && \
@@ -328,70 +350,18 @@ ____   _____________ _________  ________  ________  ___________
 EOF
 echo $end
 
-    if ! dpkg-query -l code >/dev/null; then
-        echo $yel [+]$end Installing Visual Studio Code
-        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-        sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
-        sudo bash -c 'cat << EOF > /etc/apt/sources.list.d/vscode.list
-deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
-EOF'
-        sudo apt update && sudo apt install code
-        sudo apt-get install code
-    else
-        echo $yel [*]$end Visual Studio Code previously installed
-    fi
+install_apt_pkg code "MicroSoft Visual Studio Code"
 
-    if ! sudo apt-get -qq install mtpaint; then
-        echo $yel [+]$end Installing mtpaint \(Linux Paint Program\)
-        sudo apt-get install mtpaint
-    else
-        echo $yel [*]$end mtpaint previously installed
-    fi
 
-    # if ! sudo apt-get -qq install scrot; then
-    #    echo $yel [+]$end Installing scrot \(command line screenshot\)
-    #    apt-get install scrot
-    # else
-    #    echo $yel [*]$end scrot previously installed
-    # fi
-
-    if ! sudo apt-get -qq install sshfs; then
-        echo $yel [+]$end Installing sshfs \(ssh file system\)
-        sudo apt-get install sshfs
-    else
-        echo $yel [*]$end sshfs previously installed
-    fi
-
-    if ! sudo apt-get -qq install bvi; then
-        echo $yel [+]$end Installing bvi \(Binary VI\) editor
-        sudo apt-get install bvi
-    else
-        echo $yel [*]$end bvi previously installed
-    fi
-
-    if ! sudo apt-get -qq install mingw-w64; then
-        echo $yel [+]$end Installing mingw-w64 complier for exploits
-        sudo apt-get install mingw-w64
-    else
-        echo $yel [*]$end mingw-w64 previously installed
-    fi
-
-    if ! sudo apt-get -qq install masscan; then
-        echo $yel [+]$end Installing masscan port scanner
-        sudo apt-get install masscan
-    else
-        echo $yel [*]$end masscan previously installed
-    fi
-
-    if [ $ftp -eq 1 ] ; then
-        echo $grn [+]$end Installing pure-ftpd for exfil
-
-        if ! sudo apt-get -qq install pure-ftpd; then
-            echo $yel [+]$end Installing pure-ftpd for exfil
-            sudo apt-get install pure-ftpd
-        fi
-
-    fi
+    install_apt_pkg imagemagick "Image utilities"
+    install_apt_pkg mtpaint "Image utilities"
+    # install_apt_pkg scrot "\(Command Line Screen Shot\)"
+    install_apt_pkg sshfs "\(ssh file system \)"
+    install_apt_pkg bvi  "\(Binary VI\)"
+    install_apt_pkg mingw-w64 "mingw-w64 compiler for exploits"
+    install_apt_pkg masscan "port scanner"
+    install_apt_pkg pure-ftpd "for exfil of data"
+    install_apt_pkg code "Microsoft Visual Studio Code"
 
 
     if [ ! -f ~/bin/setup-ftp.sh ] ; then
