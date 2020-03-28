@@ -23,6 +23,9 @@ install_apt_pkg() {
 
     if  ! dpkg-query -l ${1} > /dev/null; then
             echo $grn[+]$end Installing ${1} ${2}
+            echo $grn
+            figlet ${1}
+            echo $end
             echo
             sudo apt-get -y install ${1}
             echo
@@ -36,6 +39,9 @@ install_apt_pkg() {
 pull_git_repo() {
     if [ ! -d ${2} ] ; then
             echo $grn[+]$end ${3}
+            echo $grn
+            figlet ${3}
+            echo $end
             echo 
             sudo git clone ${1} ${2}
 	    echo 
@@ -76,6 +82,18 @@ cat << "EOF"
         \/         \/
 EOF
 echo $end
+
+if [ ! -f /etc/apt/trusted.gpg.d/microsoft.gpg ] ; then
+    echo $yel[+]$end Adding Microsoft GPG key and Apt Sources
+    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+    sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
+    sudo bash -c 'cat << EOF > /etc/apt/sources.list.d/vscode.list
+deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+EOF'
+else
+    echo $yel[*]$end Microsoft APT repo previously configured
+fi
+
 todaysdate=`date +%m%d`
 aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
 
@@ -116,18 +134,6 @@ EOF
         sudo git clone --recursive https://github.com/ethicalhack3r/DVWA.git /var/www/html/dvwa
     fi
 
-fi
-
-
-if [ ! -f /etc/apt/trusted.gpg.d/microsoft.gpg ] ; then
-    echo $yel[+]$end Adding Microsoft GPG key and Apt Sources
-    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-    sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
-    sudo bash -c 'cat << EOF > /etc/apt/sources.list.d/vscode.list
-deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
-EOF'
-else
-    echo $yel[*]$end Microsoft APT repo previously configured
 fi
 
 # echo $wht '[*] Check to see if Metasploit is installed' $end
@@ -224,14 +230,14 @@ pull_git_repo https://github.com/g0tmi1k/msfpc /opt/msfpc "MSVenom Payload Creat
 sudo chmod +x /opt/msfpc/msfpc.sh
 create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
-    pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "thaddeusperson supersploit"
-    pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "danielmiessler seclists"
+    pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "SupersSloit"
+    pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "Seclists"
 
-    pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "rlaw125 PlayloadGenerator aka PGen"
+    pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "PlayloadGenerator aka PGen"
     pull_git_repo https://github.com/jivoi/pentest.git /opt/pentest "jivoi pentest"
-    pull_git_repo https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner "udp-proto-scanner"
+    pull_git_repo https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner "udp proto scanner"
 
-    pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "Octothorp88 dotfiles"
+    pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "dotfiles"
     echo $grn[+]$end Changing Permissions on ~/dotfiles directory
     sudo chown -R $(whoami): ~/dotfiles
 
