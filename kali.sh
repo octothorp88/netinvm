@@ -125,22 +125,22 @@ todaysdate=`date +%m%d`
 aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
 
 if [ $todaysdate -eq $aptdate ] ; then
-    echo $yel '[+] apt-get update already ran today' $end
+    echo $yel'[+] apt-get update already ran today' $end
 else
-    echo $grn '[*] Running apt-get update to get things up to date' $end
+    echo $grn'[*] Running apt-get update to get things up to date' $end
     # sudo apt-get update -y
 fi
 # echo $wht '[*] Check to see if Metasploit is installed' $end
 if [ "$host" = "base" ] || [ "$host" = "exta" ]; then
     if ! which msfconsole > /dev/null; then
-        echo $yel '[ ] metasploit not installed yet' $end
+        echo $yel'[ ] metasploit not installed yet' $end
         echo [+] Downloading Metasploit
         curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
         chmod 755 msfinstall && \
         echo [+] Installing Metasploit
         ./msfinstall
     else
-        echo $grn '[+] Metasploit is installed' $end
+        echo $grn'[+] Metasploit is installed' $end
     fi
 
     # echo $wht '[*] Check if Tmux is installed' $end
