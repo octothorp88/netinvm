@@ -93,7 +93,7 @@ EOF
         sudo apt-get install git -y
     fi
 
-    if ! dpkg-query mysql-client ; then
+    if ! dpkg-query -l mysql-client ; then
         sudo apt-get install mysql-client mysql-server \
             php php-gd php-mysqli libapache2-mod-php -y
     fi
@@ -106,7 +106,7 @@ fi
 
 # echo $wht '[*] Check to see the last time apt-get update ran' $end
 todaysdate=`date +%m%d`
-aptdate=`date -r /var/lib/apt/periodic/update-stamp +%m%d`
+aptdate=`date -r /var/lib/apt/periodic/ +%m%d`
 
 if [ $todaysdate -eq $aptdate ] ; then
     echo $yel '[+] apt-get update already ran today' $end
@@ -169,9 +169,9 @@ echo $end
         cd /etc/ssh
         sudo mkdir default_keys
         sudo mv ssh_host* default_keys
-        sudo dpkg-reconfigure openssh-server
-        md5sum ssh_host*
-        md5sum default_keys/ssh_host*
+        sudo dpkg -reconfigure openssh-server
+        sudo md5sum ssh_host*
+        sudo md5sum default_keys/ssh_host*
     else
         echo $grn [+]$end SSH Keys previously backed up
         echo $wht '-------------------------------------------------------------' $end
@@ -183,8 +183,8 @@ echo $end
         for FILE in $(cd /etc/ssh/ && ls ssh_host*)
         do
             if [ -f /etc/ssh/default_keys/${FILE} ]; then
-                HASHDEFAULT=`md5sum /etc/ssh/default_keys/${FILE} | awk '{print $1}'`
-                HASHNEW=`md5sum /etc/ssh/${FILE} | awk '{print $1}'`
+                HASHDEFAULT=`sudo md5sum /etc/ssh/default_keys/${FILE} | awk '{print $1}'`
+                HASHNEW=`sudo md5sum /etc/ssh/${FILE} | awk '{print $1}'`
                 if [ ! "$HASHDEFAULT" = "$HASHNEW" ]; then
                     echo $grn [+]$end $HASHNEW $FILE
                 else
@@ -309,7 +309,7 @@ fi
     # fi
 
 
-    if ! dpkg-query code; then
+    if ! dpkg-query -l code >/dev/null; then
         echo $yel [+]$end Installing Visual Studio Code
         curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
         sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
@@ -451,86 +451,86 @@ chmod +x ~/bin/mount-vmware-shares.sh
 
 fi
 
-echo $yel
-cat << "EOF"
- ________                    .___.__
- \______ \____________     __| _/|__| ______
-  |    |  \_  __ \__  \   / __ | |  |/  ___/
-  |    `   \  | \// __ \_/ /_/ | |  |\___ \
- /_______  /__|  (____  /\____ | |__/____  >
-         \/           \/      \/         \/
-EOF
-echo $end
-# Check if the dradis framework has been downloaded
-    echo $grn [*]$end Checking Dradis templates
-    if [ ! -f ~/Downloads/dradis-ce_compliance_package-oscp.v0.3.zip ]; then
-        cd Downloads
-        echo $grn [*]$end Dowloading Dradis OCSP templates for Dradis
-        wget https://dradisframework.com/academy/files/dradis-ce_compliance_package-oscp.v0.3.zip
-        cd
-    else
-        echo $yel [*]$end Dradis OCSP templates exists in downloads
+# echo $yel
+# cat << "EOF"
+#  ________                    .___.__
+#  \______ \____________     __| _/|__| ______
+#   |    |  \_  __ \__  \   / __ | |  |/  ___/
+#   |    `   \  | \// __ \_/ /_/ | |  |\___ \
+#  /_______/  /__|  (____  /\____ | |__/____  >
+#          \/           \/      \/         \/
+# EOF
+# echo $end
+# # Check if the dradis framework has been downloaded
+#     echo $grn [*]$end Checking Dradis templates
+#     if [ ! -f ~/Downloads/dradis-ce_compliance_package-oscp.v0.3.zip ]; then
+#         cd Downloads
+#         echo $grn [*]$end Dowloading Dradis OCSP templates for Dradis
+#         wget https://dradisframework.com/academy/files/dradis-ce_compliance_package-oscp.v0.3.zip
+#         cd
+#     else
+#         echo $yel [*]$end Dradis OCSP templates exists in downloads
 
-    fi
-    if [ ! -d ~/Downloads/dradis-ce_compliance_package-oscp.v0.3 ]; then
-        cd ~/Downloads
-        echo $grn [*]$end Unzipping dradis-ce_copliance_package-oscp.v03.zip
-        unzip dradis-ce_compliance_package-oscp.v0.3.zip
-        cd
-    fi
+#     fi
+#     if [ ! -d ~/Downloads/dradis-ce_compliance_package-oscp.v0.3 ]; then
+#         cd ~/Downloads
+#         echo $grn [*]$end Unzipping dradis-ce_copliance_package-oscp.v03.zip
+#         unzip dradis-ce_compliance_package-oscp.v0.3.zip
+#         cd
+#     fi
 
-    for TEMPLATE in evidence.txt note-tester.txt issue.txt note
-    do
-        if [ ! -f /var/lib/dradis/templates/notes/${TEMPLATE} ] ; then
-            echo $grn [*]$end Adding Dradis OCSP ${TEMPLATE} templates to Dradis
-            cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/$TEMPLATE /var/lib/dradis/templates/notes
-        else
-            echo $yel "[*]${end} OCSP ${TEMPLATE} templates exists in Dradis"
-        fi
-    done
-    if [ ! -f /var/lib/dradis/templates/reports/html_export/dradis_template-oscp.v0.3.html.erb ] ; then
-        echo $grn [*]$end Updating Dradis Reporting templates
-        cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/dradis_template-oscp.v0.3.html.erb /var/lib/dradis/templates/reports/html_export/
-    else
-        echo $yel [*]$end Dradis Reporting template exists
-    fi
-
-fi
-
-if [ ! -f ~/bin/dradis-reset.sh ]; then
-    echo $grn [*]$end Creating dradis-reset.sh script in ~/bin
-    mkdir -p ~/bin
-cat << "EOF" > ~/bin/dradis-reset.sh
-#!/bin/bash
-#
-# The reset password is not working.. .so you need to run the following from
-# the /usr/lib/dradis directory
-# $ bin/rails console
-# Configuration.find_by_name('admin:password').update_attribute(:value, ::BCrypt::Password.create('password'))
-#
-#
-#
-#
-
-cd /usr/lib/dradis/
-echo $grn [*] $end Reset Dradis
-bundle exec thor dradis:reset
-echo $grn [*] $end Reset Dradis Attachments
-bundle exec thor dradis:reset:attachments
-echo $grn [*] $end Reset Dradis Database
-bundle exec thor dradis:reset:database
-echo $grn [*] $end Reset Dradis password
-bundle exec thor dradis:reset:password
-echo $grn [*] $end Reset Dradis again...
-bundle exec thor dradis:reset
-echo $grn [*] $end Launch Dradis
-dradis
-
-EOF
-else
-    echo $yel [*]$end Dradis-reset.sh script EXISTS
+#     for TEMPLATE in evidence.txt note-tester.txt issue.txt note
+#     do
+#         if [ ! -f /var/lib/dradis/templates/notes/${TEMPLATE} ] ; then
+#             echo $grn [*]$end Adding Dradis OCSP ${TEMPLATE} templates to Dradis
+#             cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/$TEMPLATE /var/lib/dradis/templates/notes
+#         else
+#             echo $yel "[*]${end} OCSP ${TEMPLATE} templates exists in Dradis"
+#         fi
+#     done
+#     if [ ! -f /var/lib/dradis/templates/reports/html_export/dradis_template-oscp.v0.3.html.erb ] ; then
+#         echo $grn [*]$end Updating Dradis Reporting templates
+#         cp ~/Downloads/dradis-ce_compliance_package-oscp.v0.3/dradis_template-oscp.v0.3.html.erb /var/lib/dradis/templates/reports/html_export/
+#     else
+#         echo $yel [*]$end Dradis Reporting template exists
+#     fi
 
 fi
+
+# if [ ! -f ~/bin/dradis-reset.sh ]; then
+#     echo $grn [*]$end Creating dradis-reset.sh script in ~/bin
+#     mkdir -p ~/bin
+# cat << "EOF" > ~/bin/dradis-reset.sh
+# #!/bin/bash
+# #
+# # The reset password is not working.. .so you need to run the following from
+# # the /usr/lib/dradis directory
+# # $ bin/rails console
+# # Configuration.find_by_name('admin:password').update_attribute(:value, ::BCrypt::Password.create('password'))
+# #
+# #
+# #
+# #
+
+# cd /usr/lib/dradis/
+# echo $grn [*] $end Reset Dradis
+# bundle exec thor dradis:reset
+# echo $grn [*] $end Reset Dradis Attachments
+# bundle exec thor dradis:reset:attachments
+# echo $grn [*] $end Reset Dradis Database
+# bundle exec thor dradis:reset:database
+# echo $grn [*] $end Reset Dradis password
+# bundle exec thor dradis:reset:password
+# echo $grn [*] $end Reset Dradis again...
+# bundle exec thor dradis:reset
+# echo $grn [*] $end Launch Dradis
+# dradis
+
+# EOF
+# else
+#     echo $yel [*]$end Dradis-reset.sh script EXISTS
+
+# fi
 
 #---------- Done with the OS conditional shit
 
