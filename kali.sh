@@ -38,7 +38,7 @@ install_apt_pkg() {
 
 pull_git_repo() {
     if [ ! -d ${2} ] ; then
-            echo $grn[+]$end ${3}
+            echo $grn[+]$end git pull ${3} repo to ${2}
             echo $grn
             figlet ${3}
             echo $end
@@ -49,7 +49,7 @@ pull_git_repo() {
             echo $grn --------------------------------------------------------- $end
             echo
         else
-            echo $yel[*]$end ${3} previously installed
+            echo $yel[*]$end ${3} previously pulled from git
         fi
 }
 
@@ -84,6 +84,9 @@ EOF
 echo $end
 
 if [ ! -f /etc/apt/trusted.gpg.d/microsoft.gpg ] ; then
+    echo $grn
+        figlet VStudio Code
+    echo $end
     echo $yel[+]$end Adding Microsoft GPG key and Apt Sources
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
     sudo mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
@@ -232,6 +235,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "SupersSloit"
     pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "Seclists"
+    pull_git_repo https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git /opt/windows_exploit_suggester "Windows Exploit Suggester"
 
     pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "PlayloadGenerator aka PGen"
     pull_git_repo https://github.com/jivoi/pentest.git /opt/pentest "jivoi pentest"
@@ -244,24 +248,25 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     create_symlink ~/dotfiles/.bashrc ~/.bashrc
     create_symlink ~/dotfiles/.vimrc ~/.vimrc
     create_symlink ~/dotfiles/tmux.conf ~/.tmux.conf
+    create_symlink /mnt/hgfs/OSCP-SHARE ~/share
+    create_symlink ~/share/controlpanel.txt ~/controlpanel.txt
 
     # if ! sudo apt-get -qq install  asciio; then
         # echo $yel [+]$end Installing asciio package
         # apt-get install asciio
     # fi
 
-echo $grn
-    figlet VStudio Code
-echo $end
     # install_apt_pkg asciio "asciio"
     install_apt_pkg code "MicroSoft Visual Studio Code"
     install_apt_pkg imagemagick "Image utilities"
+    install_apt_pkg unicornscan "Unicornscan"
     install_apt_pkg mtpaint "Image utilities"
     # install_apt_pkg scrot "\(Command Line Screen Shot\)"
     install_apt_pkg sshfs "\(ssh file system \)"
     install_apt_pkg bvi  "\(Binary VI\)"
     install_apt_pkg mingw-w64 "mingw-w64 compiler for exploits"
     install_apt_pkg masscan "port scanner"
+    install_apt_pkg gobuster "gobuster"
     install_apt_pkg pure-ftpd "for exfil of data"
     install_apt_pkg code "Microsoft Visual Studio Code"
     install_apt_pkg powershell "powershell"
