@@ -242,6 +242,10 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner "udp proto scanner"
 
     pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "dotfiles"
+    pull_git_repo https://github.com/commonexploits/livehosts /opt/livehosts "livehosts script"
+    pull_git_repo https://github.com/commonexploits/port-scan-automation /opt/port-scan-automation "port scan automation"
+
+
     echo $grn[+]$end Changing Permissions on ~/dotfiles directory
     sudo chown -R $(whoami): ~/dotfiles
 
