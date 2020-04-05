@@ -236,6 +236,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "SupersSloit"
     pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "Seclists"
     pull_git_repo https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git /opt/windows_exploit_suggester "Windows Exploit Suggester"
+    pull_git_repo https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS /opt/winpeas "WinPEAS"
 
     pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "PlayloadGenerator aka PGen"
     pull_git_repo https://github.com/jivoi/pentest.git /opt/pentest "jivoi pentest"
