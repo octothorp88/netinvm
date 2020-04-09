@@ -289,6 +289,39 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg code "Microsoft Visual Studio Code"
     install_apt_pkg powershell "powershell"
 
+    if [ ! -d /opt/oui ]; then
+        figlet OUI MACs
+        echo $grn[*]$end Downloading Organizational Unique IDs from IEEE
+        mkdir /opt/oui
+        cd /opt/oui
+        wget http://standards-oui.ieee.org/oui/oui.txt
+        cd
+        if [ ! -f /opt/oui/oui.txt ]; then
+            echo $grn[*]$end Success OUI Exists in /opt
+        fi
+    else
+        echo $grn[*]$end Organizational Unique IDs from IEEE in /opt
+    fi
+
+    if [ ! -f ~/bin/maclookup.sh ] ; then
+echo $grn[+]$end creating maclookup script
+cat << "EOF" > ~/bin/maclookup.sh
+#!/bin/bash
+
+MAC="$(echo $1 | sed 's/ //g' | sed 's/-//g' | sed 's/://g' | cut -c1-6)";
+
+result="$(grep -i -A 4 ^$MAC /opt/oui/oui.txt)";
+
+if [ "$result" ]; then
+    echo "For the MAC $1 the following information is found:"
+    echo "$result"
+else
+    echo "MAC $1 is not found in the database."
+fi
+
+EOF
+chmod 755 ~/bin/maclookup.sh
+    fi
 
     if [ ! -f ~/bin/setup-ftp.sh ] ; then
 
