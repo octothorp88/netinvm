@@ -306,21 +306,60 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     if [ ! -f ~/bin/maclookup.sh ] ; then
 echo $grn[+]$end creating maclookup script
 cat << "EOF" > ~/bin/maclookup.sh
-#!/bin/bash
+#!/bin/sh
 
 MAC="$(echo $1 | sed 's/ //g' | sed 's/-//g' | sed 's/://g' | cut -c1-6)";
+ORIGMAC="$(echo $1 | cut -c1-8)";
+LINE=$(printf %75s |tr " " "-")
+grn='\e[1;32m'
+end='\e[0m'
 
-result="$(grep -i -A 4 ^$MAC /opt/oui/oui.txt)";
+
+if [ -z "$1" ] ; then
+    file=$(basename $0)
+    echo "Sorry you need to give me a mac address or a partial mac"
+    echo $LINE
+    echo ""
+    echo "Usage: ./$(basename $0) 54:27:1E"
+    echo ""
+    echo "       ./$(basename $0) 54:27:1e:34:f5"
+    exit 1
+fi
+
+result=$(grep -i -A 4 ^$MAC /opt/oui/oui.txt)
 
 if [ "$result" ]; then
-    echo "For the MAC $1 the following information is found:"
+    echo "For the MAC ${grn}${1}${end} the following information is found:"
+    echo $LINE
+    echo $grn
     echo "$result"
+    echo $end
 else
     echo "MAC $1 is not found in the database."
 fi
 
+
+if  which updatedb > /dev/null; then
+    LINE2=$(printf %75s |tr " " ":")
+    echo $LINE2
+    echo "::      Using locate to find oui.txt files and searching for $1      ::"
+    echo $LINE2
+    sudo updatedb
+    for x in $(locate oui.txt);
+        do
+            grep -i -E "${MAC}|${ORIGMAC}" $x;
+        done
+    echo $LINE
+else
+    LINE2=$(printf %75s |tr " " ":")
+    echo $LINE2
+    echo "::     Using find to locate oui.txt files and searching for $1      ::"
+    find / -type f -name oui.txt -exec grep -i -E "${MAC}|${ORIGMAC}" {} \;
+    echo $LINE2
+fi
 EOF
 chmod 755 ~/bin/maclookup.sh
+
     fi
 
     if [ ! -f ~/bin/setup-ftp.sh ] ; then
