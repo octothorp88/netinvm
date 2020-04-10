@@ -247,7 +247,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "SupersSloit"
     pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "Seclists"
-    create_symlink /usr/share/seclists /opt/seclists
+    sudo ln -s /usr/share/seclists /opt/seclists ; echo $grn[+]$end linking $grn /opt/seclists $end
     pull_git_repo https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git /opt/windows_exploit_suggester "Windows Exploit Suggester"
     pull_git_repo https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git /opt/winpeas "WinPEAS"
 
@@ -290,11 +290,10 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg powershell "powershell"
 
     if [ ! -d /opt/oui ]; then
-        figlet OUI MACs
         echo $grn[*]$end Downloading Organizational Unique IDs from IEEE
-        mkdir /opt/oui
+        sudo mkdir /opt/oui
         cd /opt/oui
-        wget http://standards-oui.ieee.org/oui/oui.txt
+        sudo wget http://standards-oui.ieee.org/oui/oui.txt
         cd
         if [ ! -f /opt/oui/oui.txt ]; then
             echo $grn[*]$end Success OUI Exists in /opt
@@ -312,6 +311,7 @@ MAC="$(echo $1 | sed 's/ //g' | sed 's/-//g' | sed 's/://g' | cut -c1-6)";
 ORIGMAC="$(echo $1 | cut -c1-8)";
 LINE=$(printf %75s |tr " " "-")
 grn='\e[1;32m'
+red='\e[1;31m'
 end='\e[0m'
 
 
@@ -326,23 +326,29 @@ if [ -z "$1" ] ; then
     exit 1
 fi
 
-result=$(grep -i -A 4 ^$MAC /opt/oui/oui.txt)
+LINE2=$(printf %75s |tr " " ":")
+if [ -f /opt/oui/oui.txt ]; then
+    result=$(grep -i -A 4 ^$MAC /opt/oui/oui.txt)
+    echo $LINE2
+    echo "::     using /opt/oui/oui.txt for initital search for MAC    $1"
+    echo $LINE2
+fi
+
 
 if [ "$result" ]; then
-    echo "For the MAC ${grn}${1}${end} the following information is found:"
+    echo "For the MAC ${grn}${1}${end} the following information was found"
     echo $LINE
     echo $grn
-    echo "$result"
-    echo $end
+    echo "$result" $end
 else
-    echo "MAC $1 is not found in the database."
+    echo $red "MAC $grn $1 $red is not found in the database." $end
 fi
 
 
 if  which updatedb > /dev/null; then
     LINE2=$(printf %75s |tr " " ":")
     echo $LINE2
-    echo "::      Using locate to find oui.txt files and searching for $1      ::"
+    echo "::      Using locate to find oui.txt files and searching for $1"
     echo $LINE2
     sudo updatedb
     for x in $(locate oui.txt);
@@ -353,7 +359,7 @@ if  which updatedb > /dev/null; then
 else
     LINE2=$(printf %75s |tr " " ":")
     echo $LINE2
-    echo "::     Using find to locate oui.txt files and searching for $1      ::"
+    echo "::     Using find to locate oui.txt files and searching for $1"
     find / -type f -name oui.txt -exec grep -i -E "${MAC}|${ORIGMAC}" {} \;
     echo $LINE2
 fi
