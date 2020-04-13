@@ -33,7 +33,8 @@ fi
 
 install_apt_pkg() {
 
-    if  ! dpkg-query -l ${1} > /dev/null; then
+#    if  ! dpkg-query -l ${1} > /dev/null; then
+    if [ $(dpkg-query -W -f='${Status}' ${1} 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
             echo $grn[+]$end Installing ${1} ${2}
             echo $grn
             figlet ${1}
@@ -247,7 +248,9 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     pull_git_repo https://github.com/thaddeuspearson/Supersploit.git /opt/supersploit "SupersSloit"
     pull_git_repo https://github.com/danielmiessler/SecLists.git /usr/share/seclists "Seclists"
-    sudo ln -s /usr/share/seclists /opt/seclists ; echo $grn[+]$end linking $grn /opt/seclists $end
+    if [ ! -L /opt/seclists ] ; then
+        sudo ln -s /usr/share/seclists /opt/seclists ; echo $grn[+]$end linking $grn /opt/seclists $end
+    fi
     pull_git_repo https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git /opt/windows_exploit_suggester "Windows Exploit Suggester"
     pull_git_repo https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git /opt/winpeas "WinPEAS"
 
@@ -258,16 +261,20 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "dotfiles"
     pull_git_repo https://github.com/commonexploits/livehosts /opt/livehosts "livehosts script"
     pull_git_repo https://github.com/commonexploits/port-scan-automation /opt/port-scan-automation "port scan automation"
+    pull_git_repo https://github.com/rezasp/joomscan.git /opt/joomscan "Joomla Web CMS Scanner"
 
 
-    echo $grn[+]$end Changing Permissions on ~/dotfiles directory
-    sudo chown -R $(whoami): ~/dotfiles
-
-    create_symlink ~/dotfiles/.bashrc ~/.bashrc
-    create_symlink ~/dotfiles/.vimrc ~/.vimrc
-    create_symlink ~/dotfiles/tmux.conf ~/.tmux.conf
-    create_symlink /mnt/hgfs/OSCP-SHARE ~/share
-    create_symlink ~/share/controlpanel.txt ~/controlpanel.txt
+    if [ ! -L ~/.tmux.conf ]; then 
+        echo $grn[+]$end Changing Permissions on ~/dotfiles directory
+        create_symlink ~/dotfiles/.bashrc ~/.bashrc
+        create_symlink ~/dotfiles/.vimrc ~/.vimrc
+        create_symlink ~/dotfiles/tmux.conf ~/.tmux.conf
+        create_symlink /mnt/hgfs/OSCP-SHARE ~/share
+        create_symlink ~/share/controlpanel.txt ~/controlpanel.txt
+        sudo chown -R $(whoami): ~/dotfiles
+    else
+        echo $yel[+]$end Permissions on ~/dotfiles directory look to be already set
+    fi 
 
     # if ! sudo apt-get -qq install  asciio; then
         # echo $yel [+]$end Installing asciio package
@@ -289,6 +296,35 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg code "Microsoft Visual Studio Code"
     install_apt_pkg powershell "powershell"
 
+
+    if [ $(dpkg-query -W -f='${Status}' docker-ce 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+        figlet Docker
+        echo $grn[+]$end Adding Docker Key sudo apt-key add keyyy
+        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+        echo $grn[+]$end Configure Docker APT Repository Debian Testing
+        echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list
+
+        echo $grn[+]$end Update APT for new repo
+        sudo apt-get update
+
+        echo $grn[+]$end Remove any remnants of Docker if was previously installed
+        sudo apt-get remove docker docker-engine docker.io
+
+        echo $grn[+]$end Install Docker
+        sudo apt-get -y install docker-ce
+    fi
+
+    if [ ! -f /usr/share/wordlists/Top304Thousand-probable-v2.txt ]; then
+        echo $grn[*]$end Downloading Top304Thousand Probable v2 Passwords
+        cd /usr/share/wordlists
+        sudo wget https://raw.githubusercontent.com/berzerk0/Probable-Wordlists/master/Real-Passwords/Top304Thousand-probable-v2.txt
+        cd
+    else
+        echo $yel[*]$end Top304Thousand Probable v2 Passwords exists
+    fi
+
+
     if [ ! -d /opt/oui ]; then
         echo $grn[*]$end Downloading Organizational Unique IDs from IEEE
         sudo mkdir /opt/oui
@@ -299,7 +335,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
             echo $grn[*]$end Success OUI Exists in /opt
         fi
     else
-        echo $grn[*]$end Organizational Unique IDs from IEEE in /opt
+        echo $yel[*]$end Organizational Unique IDs from IEEE in /opt
     fi
 
     if [ ! -f ~/bin/maclookup.sh ] ; then
