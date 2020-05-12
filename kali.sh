@@ -50,6 +50,10 @@ install_apt_pkg() {
     }
 
 pull_git_repo() {
+    if [ $# -ne 3 ]; then
+        echo $red [!] ERROR pulling git REPO not enough ARGS$end
+        return
+    fi
     if [ ! -d ${2} ] ; then
             echo $grn[+]$end git pull ${3} repo to ${2}
             echo $grn
@@ -262,6 +266,8 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/commonexploits/livehosts /opt/livehosts "livehosts script"
     pull_git_repo https://github.com/commonexploits/port-scan-automation /opt/port-scan-automation "port scan automation"
     pull_git_repo https://github.com/rezasp/joomscan.git /opt/joomscan "Joomla Web CMS Scanner"
+    pull_git_repo https://github.com/pythonmaster41/Go-For-OSCP.git /opt/go-for-oscp "OSCP Git info"
+
 
 
     if [ ! -L ~/.tmux.conf ]; then 
@@ -283,6 +289,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     # install_apt_pkg asciio "asciio"
     install_apt_pkg code "MicroSoft Visual Studio Code"
+    install_apt_pkg libreoffice "Libre Office"
     install_apt_pkg imagemagick "Image utilities"
     install_apt_pkg unicornscan "Unicornscan"
     install_apt_pkg mtpaint "Image utilities"
