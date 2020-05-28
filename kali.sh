@@ -324,6 +324,7 @@ pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Ste
     fi
 
     if [ ! -f /usr/share/wordlists/Top304Thousand-probable-v2.txt ]; then
+        if which figlet > /dev/null; then figlet Top304Thousand Passwords; fi
         echo $grn[*]$end Downloading Top304Thousand Probable v2 Passwords
         cd /usr/share/wordlists
         sudo wget https://raw.githubusercontent.com/berzerk0/Probable-Wordlists/master/Real-Passwords/Top304Thousand-probable-v2.txt
@@ -333,6 +334,7 @@ pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Ste
     fi
 
     if [ ! -f /opt/initialrecon/initialrecon.py ]; then
+        if which figlet > /dev/null; then figlet Initialrecon.py; fi
         echo $grn[*]$end Downloading INITIALRECON from github
         if [ ! -d /opt/initialrecon ]; then sudo mkdir /opt/initialrecon; fi
 
@@ -347,6 +349,7 @@ pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Ste
         echo $grn[*]$end Downloading Organizational Unique IDs from IEEE
         sudo mkdir /opt/oui
         cd /opt/oui
+        if which figlet > /dev/null; then figlet IEEE oui.txt; fi
         sudo wget http://standards-oui.ieee.org/oui/oui.txt
         cd
         if [ ! -f /opt/oui/oui.txt ]; then
@@ -357,6 +360,7 @@ pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Ste
     fi
 
     if [ ! -f ~/bin/maclookup.sh ] ; then
+        if which figlet > /dev/null; then figlet maclookup.sh; fi
 echo $grn[+]$end creating maclookup script
 cat << "EOF" > ~/bin/maclookup.sh
 #!/bin/sh
