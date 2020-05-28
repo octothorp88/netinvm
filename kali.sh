@@ -267,7 +267,8 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/commonexploits/port-scan-automation /opt/port-scan-automation "port scan automation"
     pull_git_repo https://github.com/rezasp/joomscan.git /opt/joomscan "Joomla Web CMS Scanner"
     pull_git_repo https://github.com/pythonmaster41/Go-For-OSCP.git /opt/go-for-oscp "OSCP Git info"
-
+    pull_git_repo https://www.github.com/nccgroup/shocker /opt/shocker "Shocker NCC Group"
+pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Stegcracker"
 
 
     if [ ! -L ~/.tmux.conf ]; then 
@@ -331,6 +332,16 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
         echo $yel[*]$end Top304Thousand Probable v2 Passwords exists
     fi
 
+    if [ ! -f /opt/initialrecon/initialrecon.py ]; then
+        echo $grn[*]$end Downloading INITIALRECON from github
+        if [ ! -d /opt/initialrecon ]; then sudo mkdir /opt/initialrecon; fi
+
+        cd /opt/initialrecon
+        sudo wget https://gist.githubusercontent.com/curi0usJack/d7cd99411614b470911c584ec6cd42f8/raw/bb0acf5bcbce15d4d733aaa4903836e9c8d89700/initialrecon.py
+        cd
+    else
+        echo $yel[*]$end INITIALRECON previously downloaded
+    fi
 
     if [ ! -d /opt/oui ]; then
         echo $grn[*]$end Downloading Organizational Unique IDs from IEEE
