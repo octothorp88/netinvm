@@ -303,6 +303,7 @@ pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Ste
     install_apt_pkg pure-ftpd "for exfil of data"
     install_apt_pkg code "Microsoft Visual Studio Code"
     install_apt_pkg powershell "powershell"
+    install_apt_pkg seclists "seclists"
 
 
     if [ $(dpkg-query -W -f='${Status}' docker-ce 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
