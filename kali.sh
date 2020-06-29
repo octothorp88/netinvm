@@ -268,7 +268,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/rezasp/joomscan.git /opt/joomscan "Joomla Web CMS Scanner"
     pull_git_repo https://github.com/pythonmaster41/Go-For-OSCP.git /opt/go-for-oscp "OSCP Git info"
     pull_git_repo https://www.github.com/nccgroup/shocker /opt/shocker "Shocker NCC Group"
-pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Stegcracker"
+    pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Stegcracker"
 
 
     if [ ! -L ~/.tmux.conf ]; then 
@@ -305,6 +305,10 @@ pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Ste
     install_apt_pkg powershell "powershell"
     install_apt_pkg seclists "seclists"
     install_apt_pkg audacity "audacity"
+    #install_apt_pkg exiftool "exiftool"
+    install_apt_pkg steghide "steghide"
+    install_apt_pkg fcrackzip "fcrackzip"
+    install_apt_pkg libimage-exiftool-perl "exiftool"
 
 
     if [ $(dpkg-query -W -f='${Status}' docker-ce 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
