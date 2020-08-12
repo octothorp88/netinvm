@@ -34,17 +34,6 @@ nmap -sP $1 -oA $1/PingSweep >/dev/null
 cat $1/pingsweep.gnmap  | grep Host | cut -d" " -f 2 > $1/hosts.txt
 echo "[i] Found $(wc -l $1/hosts.txt | cut -d" " -f 1) hosts"
 
-# echo [+] looking for Simple Servics with nmap
-# ports="80,443,21,22,8080,8443"
-
-# sudo nmap -sS $1 --open -p $ports -iL $1/hosts.txt -oA $1/web >/dev/null
-# echo "    $(cat $1/web.gnmap  | grep -E '\ 80\/open' | wc -l) HTTP servers"
-# echo "    $(cat $1/web.gnmap  | grep -E '\ 443\/open' | wc -l) HTTPS servers"
-# echo "    $(cat $1/web.gnmap  | grep -E '\ 8080\/open' | wc -l) proxy servers"
-# echo "    $(cat $1/web.gnmap  | grep -E '\ 8443\/open' | wc -l) 8443 servers"
-# echo "    $(cat $1/web.gnmap  | grep -E '\ 21\/open' | wc -l) ftp servers"
-# echo "    $(cat $1/web.gnmap  | grep -E '\ 22\/open' | wc -l) ssh servers"
-
 echo "[+] NMAP scans on all hosts"
 for host in $(cat $1/hosts.txt); do
     [[ -d  $1/$host ]] || mkdir $1/$host
@@ -64,9 +53,14 @@ for host in $(cat $1/hosts.txt); do
         for port in $(grep -Eo '^[0-9]+/.*http' $1/$host/${host}-top1k.nmap | cut -d"/" -f1);
         do
             echo -ne "\r     - http found $host $port\r";sleep 2; cutycapt --url=http://$host:$port --out=$1/cutycapt/$host-$port.png>/dev/null
+            echo -ne "\r     - nmap http-title $host $port\r";sleep 2; nmap -p $port --script http-title $host -oA $1/$host/$host-$port-HTTP-TITLE
+            echo -ne "\r     - Gobuster that mofo $host:$port\r";sleep2; gobuster dir -u http://${host}:${port} -w /usr/share/wordlists/dirb/big.txt -q -x "php,txt,html,bak,old" -o $1/$host/$host-$port-gobuster.txt
         done
         echo "[+] Identified $(grep -Eo '^[0-9]+/.*http' $1/$host/${host}-top1k.nmap | wc -l) web servers on ${host}"
     fi
+
+
+
 done
 
 if ls ${1}/cutycapt/*.png &> /dev/null;
