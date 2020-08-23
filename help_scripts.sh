@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# much of hte information below was stolen/borrowed from the following 
+# resouces
+#
+# https://scund00r.com/all/oscp/2018/02/25/passing-oscp.html
+
 function show-tput-colors {
 for fg_color in {0..7}; do
         set_foreground=$(tput setaf $fg_color)
@@ -62,33 +67,42 @@ function print-figlet() {
     back=$'\b'
 } 2>/dev/null ||:
 
+function help-tmux {
+    echo ${reset}${red}${bold}
+    echo "Disable mouse so you can copy and paste"
+    echo $green
+    echo "ctrl-b :set -g mouse off"
+    echo
+
+}
+
 function help-cracking () {
-echo ${reset}${red}${bold}
-echo John and shadow file
-echo $green
-echo 'unshadow passwd shadow > unshadow.db'
-echo 'john unshadow.db'
-echo ${reset}${red}${bold}
-echo 'Hashcat SHA512 $6$ shadow file'
-echo ${reset}${green}
-echo 'hashcat -m 1800 -a 0 hash.txt rockyou.txt --username'
-echo ${reset}${red}${bold}
-echo 'Hashcat MD5 $1$ shadow file'
-echo ${reset}${green}
-echo 'hashcat -m 500 -a 0 hash.txt rockyou.txt --username'
-echo ${reset}${red}${bold}
-echo 'Hashcat MD5 Apache webdav file'
-echo ${reset}${green}
-echo 'hashcat -m 1600 -a 0 hash.txt rockyou.txt'
-echo ${reset}${red}${bold}
-echo Hashcat SHA1
-echo ${reset}${green}
-echo 'hashcat -m 100 -a 0 hash.txt rockyou.txt --force'
-echo ${reset}${red}${bold}
-echo 'Hashcat Wordpress'
-echo ${reset}${green}
-echo 'hashcat -m 400 -a 0 --remove hash.txt rockyou.txt'
-echo $reset
+    echo ${reset}${red}${bold}
+    echo \# John and shadow file
+    echo $green
+    echo 'unshadow passwd shadow > unshadow.db'
+    echo 'john unshadow.db'
+    echo ${reset}${red}${bold}
+    echo 'Hashcat SHA512 $6$ shadow file'
+    echo ${reset}${green}
+    echo 'hashcat -m 1800 -a 0 hash.txt rockyou.txt --username'
+    echo ${reset}${red}${bold}
+    echo 'Hashcat MD5 $1$ shadow file'
+    echo ${reset}${green}
+    echo 'hashcat -m 500 -a 0 hash.txt rockyou.txt --username'
+    echo ${reset}${red}${bold}
+    echo 'Hashcat MD5 Apache webdav file'
+    echo ${reset}${green}
+    echo 'hashcat -m 1600 -a 0 hash.txt rockyou.txt'
+    echo ${reset}${red}${bold}
+    echo Hashcat SHA1
+    echo ${reset}${green}
+    echo 'hashcat -m 100 -a 0 hash.txt rockyou.txt --force'
+    echo ${reset}${red}${bold}
+    echo 'Hashcat Wordpress'
+    echo ${reset}${green}
+    echo 'hashcat -m 400 -a 0 --remove hash.txt rockyou.txt'
+    echo $reset
 
 }
 

@@ -309,6 +309,8 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg steghide "steghide"
     install_apt_pkg fcrackzip "fcrackzip"
     install_apt_pkg libimage-exiftool-perl "exiftool"
+    install_apt_pkg youtube-dl "youtube-dl"
+
 
 
     if [ $(dpkg-query -W -f='${Status}' docker-ce 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
