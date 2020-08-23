@@ -378,17 +378,19 @@ function help-webscan {
 function help-gobuster {
 echo ${red}${bold}
 if which figlet > /dev/null; then figlet gobuster;echo ; fi
-echo Gobuster quick directory busting
+echo ${white}
+gobuster -h
+echo ${red}Gobuster quick directory busting
 echo ${reset}${green}
-echo "gobuster -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/common.txt -t 80 -a Linux"
+echo "gobuster dir -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/common.txt -t 80 -a Linux"
 echo ${red}${bold}
 echo Gobuster comprehensive directory busting
 echo ${reset}${green}
-echo "gobuster -s 200,204,301,302,307,403 -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/big.txt -t 80 -a 'Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'"
+echo "gobuster dir -s 200,204,301,302,307,403 -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/big.txt -t 80 -a 'Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'"
 echo ${red}${bold}
 echo Gobuster search with file extension
 echo ${reset}${green}
-echo "gobuster -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/common.txt -t 80 -a Linux -x .txt,.php"
+echo "gobuster dir -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/common.txt -t 80 -a Linux -x .txt,.php"
 echo ${red}${bold}
 echo Nikto web server scan
 echo ${reset}${green}
@@ -561,5 +563,15 @@ echo "Plink local port forwarding"
 echo ${reset}${green}
 echo "plink -l root -pw pass -R 3389:<localhost>:3389 <remote host>"
 echo
+
+}
+
+function help-processes {
+
+    echo ${red}${bold}
+    echo "Killing a Job"
+    echo ${green}
+    echo "kill %1 #will kill job 1"
+    echo
 
 }
