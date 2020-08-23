@@ -293,7 +293,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg libreoffice "Libre Office"
     install_apt_pkg imagemagick "Image utilities"
     install_apt_pkg unicornscan "Unicornscan"
-    install_apt_pkg mtpaint "Image utilities"
+    # install_apt_pkg mtpaint "Image utilities"
     # install_apt_pkg scrot "(Command Line Screen Shot)"
     install_apt_pkg sshfs "(ssh file system)"
     install_apt_pkg bvi  "(Binary VI)"
