@@ -1,6 +1,3 @@
-# First we need to identify the hosts that are online
-# The easiest thing is to find the systems that respond
-# to ICMP
 
 if [ ! -x "$(command -v nmap)" ];then
         echo "[+] nmap not detected...Installing"
@@ -28,6 +25,10 @@ if [ ! -d "$1/enum" ]; then
     echo "making directory $1/enum"
     mkdir -p $1/{enum,cutycapt}
 fi
+
+# First we need to identify the hosts that are online
+# The easiest thing is to find the systems that respond
+# to ICMP
 
 echo "[+] Running simple Ping sweep against $1"
 nmap -sP $1 -oA $1/PingSweep >/dev/null
