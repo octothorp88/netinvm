@@ -813,3 +813,28 @@ function help-wireshark {
     echo "tcp.port == 80"
     echo ""
 }
+
+function help-tcpdump {
+    print-figlet "tcpdump"
+    echo ""
+    echo "Filtering Traffic"
+    echo ""
+    echo "sudo tcpdumpt -n -r file.pcap"
+    echo ""
+    echo "sudo tcpdump -n src host $ip -r somecapture.pcap"
+    echo "                src host $ip is the filter"
+    echo ""
+    echo "sudo tcpdump -nX somecapture.pcap"
+    echo "       X will print in ascii and hex format"
+    echo ""
+    echo "advanced header filtering"
+    echo "Looking for ACK and PUSH flags"
+    echo ""
+    echo "echo \"\$((2#00011000))\" <-- showing that PUSH and ACK = 24"
+    echo ""
+    echo "sudo tcpdump -A -n 'tcp[13] = 24' -r somepcap.pcap"
+
+
+}
+
+
