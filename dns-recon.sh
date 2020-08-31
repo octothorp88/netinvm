@@ -49,7 +49,7 @@ echo "${reset}"
 if [ ! -z "$1" ] ; then
     echo "${green}[+] Domain set to ${white}$1${reset}" 
 else
-    echo "Usage: $0 megacorpone.com"
+    echo "Usage: $0 bigcorpone.com"
     echo ""
     exit 1
 fi
