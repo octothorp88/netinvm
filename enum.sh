@@ -55,7 +55,7 @@ for host in $(cat $1/hosts.txt); do
         do
             echo -ne "\r     - http found $host $port\r";sleep 2; cutycapt --url=http://$host:$port --out=$1/cutycapt/$host-$port.png>/dev/null
             echo -ne "\r     - nmap http-title $host $port\r";sleep 2; nmap -p $port --script http-title $host -oA $1/$host/$host-$port-HTTP-TITLE
-            echo -ne "\r     - Gobuster that mofo $host:$port\r";sleep2; gobuster dir -u http://${host}:${port} -w /usr/share/wordlists/dirb/big.txt -q -x "php,txt,html,bak,old" -o $1/$host/$host-$port-gobuster.txt
+            echo -ne "\r     - Gobuster that mofo $host:$port\r";sleep 2; gobuster dir -u http://${host}:${port} -w /usr/share/wordlists/dirb/big.txt -q -x "php,txt,html,bak,old" -o $1/$host/$host-$port-gobuster.txt
         done
         echo "[+] Identified $(grep -Eo '^[0-9]+/.*http' $1/$host/${host}-top1k.nmap | wc -l) web servers on ${host}"
     fi

@@ -269,6 +269,18 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/pythonmaster41/Go-For-OSCP.git /opt/go-for-oscp "OSCP Git info"
     pull_git_repo https://www.github.com/nccgroup/shocker /opt/shocker "Shocker NCC Group"
     pull_git_repo https://github.com/Paradoxis/StegCracker.git /opt/stegcracker "Stegcracker"
+    pull_git_repo https://github.com/SecureAuthCorp/impacket.git /opt/impacket "Impacket"
+    pull_git_repo https://github.com/dievus/threader3000.git /opt/threader3000 "threader3000"
+    pull_git_repo https://github.com/pentestmonkey/windows-privesc-check /opt/windows-privesc-check "Windows Privesc Check"
+    pull_git_repo https://github.com/pentestmonkey/unix-privesc-check /opt/unix-privesc-check "unix Privesc Check"
+    # sudo pip3 install threader3000
+
+    if [ ! -L "/usr/local/bin/threader3000" ] ; then
+        sudo ln -s /opt/threader3000/threader3000.py /usr/local/bin/threader3000 ; echo $grn[+]$end linking $grn /opt/seclists $end
+    fi
+
+   #  cd /opt/impacket
+   # python setup.py install
 
 
     if [ ! -L ~/.tmux.conf ]; then 
@@ -345,14 +357,26 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     if [ ! -f /opt/initialrecon/initialrecon.py ]; then
         if which figlet > /dev/null; then figlet Initialrecon.py; fi
-        echo $grn[*]$end Downloading INITIALRECON from github
+            echo $grn[*]$end Downloading INITIALRECON from github
         if [ ! -d /opt/initialrecon ]; then sudo mkdir /opt/initialrecon; fi
-
-        cd /opt/initialrecon
-        sudo wget https://gist.githubusercontent.com/curi0usJack/d7cd99411614b470911c584ec6cd42f8/raw/bb0acf5bcbce15d4d733aaa4903836e9c8d89700/initialrecon.py
+            mkdir /opt/initialrecon
+            cd /opt/initialrecon
+            sudo wget https://gist.githubusercontent.com/curi0usJack/d7cd99411614b470911c584ec6cd42f8/raw/bb0acf5bcbce15d4d733aaa4903836e9c8d89700/initialrecon.py
         cd
     else
         echo $yel[*]$end INITIALRECON previously downloaded
+    fi
+
+
+    if [ ! -d /opt/pstools ]; then
+        if which figlet > /dev/null; then figlet pstools; fi
+        sudo mkdir /opt/pstools
+        cd /opt/pstools
+        sudo wget https://download.sysinternals.com/files/PSTools.zip
+        if [ -f /opt/pstools/PSTools.zip ]; then
+            sudo unzip PSTools.zip
+        fi
+        cd
     fi
 
     if [ ! -d /opt/oui ]; then

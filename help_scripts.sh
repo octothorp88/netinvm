@@ -79,6 +79,14 @@ function help-tmux {
 
 }
 
+function help-john () {
+    help-cracking
+}
+
+function help-hashcat() {
+    help-cracking
+}
+
 function help-cracking () {
     echo ${reset}${red}${bold}
     echo \# John and shadow file
@@ -105,6 +113,10 @@ function help-cracking () {
     echo 'Hashcat Wordpress'
     echo ${reset}${green}
     echo 'hashcat -m 400 -a 0 --remove hash.txt rockyou.txt'
+    echo ${reset}${white}${bold}
+    echo 'SHA512 with hash'
+    echo ${reset}${green}
+    echo 'sudo hashcat -m 1710 backdoor --force /usr/share/wordlists/rockyou.txt '
     echo $reset
 }
 
@@ -119,10 +131,28 @@ echo SSH user with password list
 echo ${reset}${green}
 echo "hydra -l user -P pass.txt -t 10 $ip ssh -s 22"
 echo ${reset}${red}${bold}
+echo "Hydra against basic authentication"
+echo ${reset}${green}
+echo "hydra -l bob -P /usr/share/seclists/Passwords/darkweb2017-top1000.txt  -e ns http-get://$IP/protected"
 echo FTP user with password list
 echo ${reset}${green}
 echo "medusa -h $ip -u user -P passwords.txt -M ftp"
 echo
+}
+
+function help-hydra () {
+echo ${reset}${red}${bold}
+print-figlet "Hydra Brute"
+if which tldr > /dev/null; then tldr hydra;echo ; fi
+echo ${reset}${red}${bold}
+echo SSH user with password list
+echo ${reset}${green}
+echo "hydra -l user -P pass.txt -t 10 $ip ssh -s 22"
+echo ${reset}${red}${bold}
+echo "Hydra against basic authentication"
+echo ${reset}${green}
+echo "hydra -l bob -P /usr/share/seclists/Passwords/darkweb2017-top1000.txt  -e ns http-get://$IP/protected"
+echo 
 }
 
 
@@ -393,6 +423,16 @@ echo "${green}for x in 7000 8000 9000; do nmap -Pn --host_timeout 201 --max-retr
 
 function help-webscan {
     help-gobuster
+}
+
+function help-metasploit {
+
+echo "Dirbuster functionality"
+echo "use auxiliary/scanner/http/dir_scanner"
+echo "set RHOSTS 10.0.0.27"
+echo "set RPORT 1234"
+echo "run"
+
 }
 
 function help-gobuster {
