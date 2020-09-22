@@ -257,6 +257,8 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     fi
     pull_git_repo https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git /opt/windows_exploit_suggester "Windows Exploit Suggester"
     pull_git_repo https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git /opt/winpeas "WinPEAS"
+    pull_git_repo https://github.com/rebootuser/LinEnum /opt/linenum "LinEnum"
+    pull_git_repo https://github.com/diego-treitos/linux-smart-enumeration /opt/lse "Linux Smart Enumeration"
 
     pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "PlayloadGenerator aka PGen"
     pull_git_repo https://github.com/jivoi/pentest.git /opt/pentest "jivoi pentest"
@@ -273,6 +275,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/dievus/threader3000.git /opt/threader3000 "threader3000"
     pull_git_repo https://github.com/pentestmonkey/windows-privesc-check /opt/windows-privesc-check "Windows Privesc Check"
     pull_git_repo https://github.com/pentestmonkey/unix-privesc-check /opt/unix-privesc-check "unix Privesc Check"
+    pull_git_repo https://github.com/BC-SECURITY/Empire/ /opt/psempire "Powershell Empire"
     pull_git_repo https://github.com/0x00-0x00/ShellPop.git /opt/shellpop "shellpop"
     # sudo pip3 install threader3000
 
@@ -325,6 +328,8 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg fcrackzip "fcrackzip"
     install_apt_pkg libimage-exiftool-perl "exiftool"
     install_apt_pkg youtube-dl "youtube-dl"
+    install_apt_pkg linux-exploit-suggester "Linux Exploit Suggester"
+
 
 
 
