@@ -330,6 +330,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg libimage-exiftool-perl "exiftool"
     install_apt_pkg youtube-dl "youtube-dl"
     install_apt_pkg linux-exploit-suggester "Linux Exploit Suggester"
+    install_apt_pkg powershell-empire "PowerShellEmpire"
 
 
 
