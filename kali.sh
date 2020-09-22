@@ -275,7 +275,8 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/dievus/threader3000.git /opt/threader3000 "threader3000"
     pull_git_repo https://github.com/pentestmonkey/windows-privesc-check /opt/windows-privesc-check "Windows Privesc Check"
     pull_git_repo https://github.com/pentestmonkey/unix-privesc-check /opt/unix-privesc-check "unix Privesc Check"
-    pull_git_repo https://github.com/BC-SECURITY/Empire/ /opt/psempire "Powershell Empire"
+    # pull_git_repo https://github.com/BC-SECURITY/Empire/ /opt/psempire "Powershell Empire"
+    pull_git_repo https://github.com/PowerShellEmpire/Empire.git /opt/empire "Powershell Empire"
     pull_git_repo https://github.com/0x00-0x00/ShellPop.git /opt/shellpop "shellpop"
     # sudo pip3 install threader3000
 
