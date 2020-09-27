@@ -337,7 +337,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
 
     if [ $(dpkg-query -W -f='${Status}' docker-ce 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
         figlet Docker
-        echo $grn[+]$end Adding Docker Key sudo apt-key add keyyy
+        echo $grn[+]$end Adding Docker Key sudo apt-key add key
         curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 
         echo $grn[+]$end Configure Docker APT Repository Debian Testing
