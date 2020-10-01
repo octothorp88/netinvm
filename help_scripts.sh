@@ -615,6 +615,13 @@ echo "snmp-check 10.10.10.10"
 echo
 }
 
+help-zonexfer {
+    echo "To check for DNS transfer, you can use the host command:"
+    echo "host -t axfr domain.name dns-server"
+    echo "You can also use the dig command:"
+    echo "dig axfr @dns-server domain.name"
+}
+
 function help-python-servers {
 echo ${red}${bold}
 print-figlet Python Servers
