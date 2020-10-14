@@ -34,7 +34,7 @@ echo ""
 echo "[+] Looking for email addresses"
 echo ""
 
-# wget -O- ${1}/about.html 2>/dev/null   | grep -Eo "[a-zA-Z]+@.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9]+" | sort | uniq  | tee ${1}-email.txt
+wget -O- ${1}/about.html 2>/dev/null   | grep -Eo "[a-zA-Z]+@.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9]+" | sort | uniq  | tee ${1}-email.txt
 
 echo ""
 echo "[+] $(wc -l ${1}-email.txt) uniq emails found"

@@ -43,7 +43,12 @@ outfile="${1}-subdomain.txt"
 } 2>/dev/null ||:
 
 echo "${white}"
-if which figlet > /dev/null; then figlet DNS Tool;else echo "DNS Tool"; fi
+if which fiiglet > /dev/null; then figlet DNS Tool
+    else
+        echo "DNS Tool"
+        echo ""
+        echo "[!] if you had figlet installed I would have displayed the cool logo"
+fi
 echo "${reset}"
 
 if [ ! -z "$1" ] ; then

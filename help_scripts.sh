@@ -615,7 +615,7 @@ echo "snmp-check 10.10.10.10"
 echo
 }
 
-help-zonexfer {
+function help-zonexfer {
     echo "To check for DNS transfer, you can use the host command:"
     echo "host -t axfr domain.name dns-server"
     echo "You can also use the dig command:"
