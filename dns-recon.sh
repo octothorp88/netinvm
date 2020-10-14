@@ -1,5 +1,5 @@
 #!/bin/bash
-file="/usr/share/seclists/Discovery/DNS/namelist.txt"
+file="/usr/share/dnsrecon/subdomains-top1mil-5000.txt"
 outfile="${1}-subdomain.txt"
 
 # Variables for terminal requests.
@@ -64,6 +64,11 @@ if [ ! -f $file ] ; then
     exit 1
 fi
 
+if ! which bc >/dev/null ; then
+    echo "${red}[!] recommend install bc so I can do percentage calculations"
+    echo "${red} sudo apt install bc${reset}"
+fi
+
 
 echo "${green}[+] Looking for name servers${reset}"
 whois $1 | egrep -o 'Name.Server:.*\..*' | awk -F':' '{print $2}' | sort | uniq > ${1}-ns.txt
@@ -96,8 +101,9 @@ echo ""
 count=1
 tput civis
 for sub in $(cat $file); do
-    percentage=$(printf %.2f $(echo "$count/$entries*100" | bc -l))
-    subdomain="${italic}Trying: ${percentage}%  ${sub}" 
+    percentage="--"
+    if which bc > /dev/null; then percentage=$(printf %.2f $(echo "$count/$entries*100" | bc -l)); fi
+    subdomain="${italic}Trying: ${percentage}%  ${sub}"
     echo -ne "${green}$subdomain${reset}"
     output=$(host ${sub}.$1 | grep 'has address') # | awk -F"has address" '{printf "%s %s",$2, $1}')
     echo -ne "\033[1K"

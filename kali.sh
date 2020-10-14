@@ -331,8 +331,12 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg youtube-dl "youtube-dl"
     install_apt_pkg linux-exploit-suggester "Linux Exploit Suggester"
     install_apt_pkg powershell-empire "PowerShellEmpire"
+<<<<<<< HEAD
+    install_apt_pkg httrack "httrack"
+=======
     install_apt_pkg bc "bc calculator"
     install_apt_pkg sublist3r "Sublist3r"
+>>>>>>> 4fb7c1705e8731e05ee739be7caf0cf1e29753a4
 
 
 
