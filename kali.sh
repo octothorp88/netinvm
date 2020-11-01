@@ -278,6 +278,27 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     # pull_git_repo https://github.com/BC-SECURITY/Empire/ /opt/psempire "Powershell Empire"
     # pull_git_repo https://github.com/PowerShellEmpire/Empire.git /opt/empire "Powershell Empire"
     pull_git_repo https://github.com/0x00-0x00/ShellPop.git /opt/shellpop "shellpop"
+    pull_git_repo https://github.com/DominicBreuker/pspy.git /opt/pspy "pspy"
+
+    if [ ! -d /opt/pspy/bin ]; then 
+        echo $grn[+]$end Creating /opt/pspy
+        sudo mkdir /opt/pspy/bin
+        sudo chown kali: /opt/pspy/bin
+        for file in pspy32 pspy32s pspy64 pspy64s; do 
+            if [ ! -f /opt/pspy/${file} ]; then
+                echo $grn[+]$end Downloading $file
+                wget -q https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/${file}
+            else
+                echo $yel[+]$end /opt/pspy/${file} Exists
+            fi
+        done
+        sudo chown root: /opt/pspy/bin
+    else
+        echo $yel[+]$end pspy directory exists
+        cd /opt/pspy/bin
+        cd
+    fi
+
     # sudo pip3 install threader3000
 
     if [ ! -L "/usr/local/bin/threader3000" ] ; then
@@ -334,7 +355,82 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg httrack "httrack"
     install_apt_pkg bc "bc calculator"
     install_apt_pkg sublist3r "Sublist3r"
+    install_apt_pkg pandoc "Pandoc for OSCP Report"
+    install_apt_pkg texlive-full "texlive full for OSCP Report"
+    install_apt_pkg texlive-latex-extra "additional latex extras for OSCP Report"
+    install_apt_pkg p7zip "p7zip for OSCP Report"
+    install_apt_pkg oscanner "oscanner for autorecon"
+    install_apt_pkg smtp-user-enum "smtp-user-scanner for autorecon"
+    install_apt_pkg sipvicious "sipvicious  for autorecon"
+    install_apt_pkg tnscmd10g "tnscmd10g for autorecon"
+    install_apt_pkg wkhtmltopdf "wkhtmltopdf for autorecon"
+    install_apt_pkg python3-venv "python3-venv virutal enviornment"
+    install_apt_pkg python3-pip "python3-pip "
+    install_apt_pkg remmina "Remote Desktop Remmina"
 
+    filetodownload="/opt/oscp_report/eisvogel/Eisvogel-1.5.0.tar.gz"
+    pandoctemplate=/usr/share/pandoc/data/templates/eisvogel.latex
+    if [ ! -f $filetodownload ]; then
+        if which figlet > /dev/null; then figlet Eisvogel; fi
+        if [ ! -d $(dirname $filetodownload) ]; then sudo mkdir -p $(dirname $filetodownload); fi
+        echo $grn[*]$end Downloading Eisvogel Template for pandoc
+        cd /tmp
+        echo $grn[*]$end Downloading $(basename $filetodownload)
+        wget https://github.com/Wandmalfarbe/pandoc-latex-template/releases/download/v1.5.0/Eisvogel-1.5.0.tar.gz
+        tar -zxvf $filetodownload eisvogel.tex >/dev/null
+        cd
+        if [ -f /tmp/$(basename $filetodownload) ]; then
+            echo "$grn[*]$end Download Success"
+            sudo mv /tmp/$(basename $filetodownload) $(dirname $filetodownload)
+        else
+            echo "$red[-]$end Download Failed"
+        fi
+
+        if [ ! -f $pandoctemplate ]; then
+            echo $grn[*]$end creating $(dirname $pandoctemplate)
+            if [ ! -d $(dirname $pandoctemplate) ]; then sudo mkdir -p $(dirname $pandoctemplate); fi
+            cd $(dirname $pandoctemplate)
+            sudo tar -zxvf $filetodownload eisvogel.tex >/dev/null
+            sudo mv eisvogel.tex eisvogel.latex
+            if [ -f $pandoctemplate ]; then
+                echo $grn[*]$end $(basename $pandoctemplate) installed
+            else
+                echo $red[-]$end $(basename $pandoctemplate) install failed
+            fi
+        fi
+
+    else
+        echo $yel[*]$end Eisvogel Template for pandoc exists
+    fi
+
+    pull_git_repo https://github.com/noraj/OSCP-Exam-Report-Template-Markdown.git /opt/oscp_report/noraj "noraj pandoc OSCP template generator"
+    pull_git_repo https://github.com/JohnHammond/oscp-notetaking.git /opt/oscp_report/scripts "John Hammond OSCP submission scripts"
+
+    if [ ! -d ~/venv ]; then
+        if which figlet > /dev/null; then figlet VENV DIRS; fi
+        echo $grn[*]$end creating ~/venv for virtual python installs
+        mkdir ~/venv
+    else
+        echo $yel[*]$end ~/venv previously created
+    fi
+
+    if [ ! -d ~/venv/autorecon-venv ]; then
+        if which figlet > /dev/null; then figlet autorecon venv; fi
+        python3 -m venv ~/venv/autorecon-venv
+         if [ -f ~/venv/autorecon-venv/bin/activate ]; then
+            . ~/venv/autorecon-venv/bin/activate
+            if [ $? -eq 0 ]; then
+                echo $grn[*]$end venv autorecon Success!
+                echo $grn[*]$end Installing AutoRecon in ~/venv/autorecon
+                python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
+                deactivate
+            else
+                echo $red[!]$end venv autorecon FAIL!
+            fi
+         fi
+     else
+        echo $yel[*]$end ~/venv/autorecon-venv previously created
+    fi
 
 
 
@@ -370,7 +466,6 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
         if which figlet > /dev/null; then figlet Initialrecon.py; fi
             echo $grn[*]$end Downloading INITIALRECON from github
         if [ ! -d /opt/initialrecon ]; then sudo mkdir /opt/initialrecon; fi
-            mkdir /opt/initialrecon
             cd /opt/initialrecon
             sudo wget https://gist.githubusercontent.com/curi0usJack/d7cd99411614b470911c584ec6cd42f8/raw/bb0acf5bcbce15d4d733aaa4903836e9c8d89700/initialrecon.py
         cd

