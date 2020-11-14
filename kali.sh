@@ -279,6 +279,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     # pull_git_repo https://github.com/PowerShellEmpire/Empire.git /opt/empire "Powershell Empire"
     pull_git_repo https://github.com/0x00-0x00/ShellPop.git /opt/shellpop "shellpop"
     pull_git_repo https://github.com/DominicBreuker/pspy.git /opt/pspy "pspy"
+    pull_git_repo https://github.com/internetwache/GitTools.git /opt/GitTools "GitTools"
 
     if [ ! -d /opt/pspy/bin ]; then 
         echo $grn[+]$end Creating /opt/pspy
