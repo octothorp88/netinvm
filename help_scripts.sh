@@ -1056,6 +1056,7 @@ if which tldr > /dev/null; then tldr xfreerdp;echo ; fi
 if which tldr > /dev/null; then tldr rdesktop;echo ; fi
 if which tldr > /dev/null; then tldr remmina;echo ; fi
 echo "${reset}${yellow}"
+echo "   xfreerdp /dynamic-resolution +clipboard /cert:ignore /v:$ip /u:$username /p:$password"
 echo "   xfreerdp /u:\$username /p:\$password /cert:ignore /v:\$ip"
 echo ""
 echo "${yellow}   rdesktop -g 70% -u \$username-p \$password \$ip "
