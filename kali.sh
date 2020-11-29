@@ -370,6 +370,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg remmina "Remote Desktop Remmina"
     install_apt_pkg pngcheck "png forensics"
     install_apt_pkg foremost "file/image forensics"
+    install_apt_pkg rlwrap   "rlwrap - awesome!"
 
     filetodownload="/opt/oscp_report/eisvogel/Eisvogel-1.5.0.tar.gz"
     pandoctemplate=/usr/share/pandoc/data/templates/eisvogel.latex
