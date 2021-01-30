@@ -213,6 +213,10 @@ echo ${reset}${red}${bold}
 echo "Hydra against basic authentication"
 echo ${reset}${green}
 echo "hydra -l bob -P /usr/share/seclists/Passwords/darkweb2017-top1000.txt  -e ns http-get://$IP/protected"
+echo ${reset}${red}${bold}
+echo "Hydra against form post authentication"
+echo ${reset}${green}
+echo "hydra -L user -P pass 10.10.114.147 http-post-form '/login:username=^USER^&password=^PASS^:incorrect' "
 echo FTP user with password list
 echo ${reset}${green}
 echo "medusa -h $ip -u user -P passwords.txt -M ftp"
@@ -1057,6 +1061,7 @@ if which tldr > /dev/null; then tldr xfreerdp;echo ; fi
 if which tldr > /dev/null; then tldr rdesktop;echo ; fi
 if which tldr > /dev/null; then tldr remmina;echo ; fi
 echo "${reset}${yellow}"
+echo "   xfreerdp /dynamic-resolution +clipboard /cert:ignore /v:$ip /u:$username /p:$password"
 echo "   xfreerdp /u:\$username /p:\$password /cert:ignore /v:\$ip"
 echo ""
 echo "${yellow}   rdesktop -g 70% -u \$username-p \$password \$ip "

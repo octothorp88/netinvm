@@ -279,6 +279,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     # pull_git_repo https://github.com/PowerShellEmpire/Empire.git /opt/empire "Powershell Empire"
     pull_git_repo https://github.com/0x00-0x00/ShellPop.git /opt/shellpop "shellpop"
     pull_git_repo https://github.com/DominicBreuker/pspy.git /opt/pspy "pspy"
+    pull_git_repo https://github.com/internetwache/GitTools.git /opt/GitTools "GitTools"
 
     if [ ! -d /opt/pspy/bin ]; then 
         echo $grn[+]$end Creating /opt/pspy
@@ -368,6 +369,9 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg python3-venv "python3-venv virutal enviornment"
     install_apt_pkg python3-pip "python3-pip "
     install_apt_pkg remmina "Remote Desktop Remmina"
+    install_apt_pkg pngcheck "png forensics"
+    install_apt_pkg foremost "file/image forensics"
+    install_apt_pkg rlwrap   "rlwrap - awesome!"
 
     filetodownload="/opt/oscp_report/eisvogel/Eisvogel-1.5.0.tar.gz"
     pandoctemplate=/usr/share/pandoc/data/templates/eisvogel.latex
