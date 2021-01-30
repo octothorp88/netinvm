@@ -226,7 +226,8 @@ if which tldr > /dev/null; then tldr hydra;echo ; fi
 echo ${reset}${red}${bold}
 echo SSH user with password list
 echo ${reset}${green}
-echo "hydra -l user -P pass.txt -t 10 $ip ssh -s 22"
+echo "hydra -l lin -P locks.txt ssh://10.10.111.12 | tee ../hydra-ssh.txt"
+# echo "hydra -l user -P pass.txt -t 10 $ip ssh -s 22"
 echo ${reset}${red}${bold}
 echo "Hydra against basic authentication"
 echo ${reset}${green}

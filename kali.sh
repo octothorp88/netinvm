@@ -286,6 +286,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
         sudo chown kali: /opt/pspy/bin
         for file in pspy32 pspy32s pspy64 pspy64s; do 
             if [ ! -f /opt/pspy/${file} ]; then
+                cd /opt/pspy/bin
                 echo $grn[+]$end Downloading $file
                 wget -q https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/${file}
             else
