@@ -358,6 +358,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     install_apt_pkg bc "bc calculator"
     install_apt_pkg sublist3r "Sublist3r"
     install_apt_pkg pandoc "Pandoc for OSCP Report"
+    install_apt_pkg lynx "Lynx"
     install_apt_pkg texlive-full "texlive full for OSCP Report"
     install_apt_pkg texlive-latex-extra "additional latex extras for OSCP Report"
     install_apt_pkg p7zip "p7zip for OSCP Report"
