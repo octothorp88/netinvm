@@ -263,6 +263,7 @@ create_symlink /opt/msfpc/msfpc.sh ~/bin/msfpc
     pull_git_repo https://github.com/rlaw125/payloadgenerator.git /opt/payloadgenerator "PlayloadGenerator aka PGen"
     pull_git_repo https://github.com/jivoi/pentest.git /opt/pentest "jivoi pentest"
     pull_git_repo https://github.com/portcullislabs/udp-proto-scanner /opt/udp-proto-scanner "udp proto scanner"
+    pull_git_repo https://github.com/Bashfuscator/Bashfuscator /opt/bashfuscator "Bashfuscator"
 
     pull_git_repo https://www.github.com/octothorp88/dotfiles ~/dotfiles "dotfiles"
     pull_git_repo https://github.com/commonexploits/livehosts /opt/livehosts "livehosts script"
