@@ -3,3 +3,5 @@ echo "ffuf -w /usr/share/wordlists/SecLists/Usernames/Names/names.txt -X POST -d
 }
 
 help-ffuf
+
+# test
